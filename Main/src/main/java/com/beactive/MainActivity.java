@@ -3,17 +3,19 @@ package com.beactive;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.beactive.network.ConnectionMock;
+import com.beactive.network.ServerConnection;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.lucasr.twowayview.TwoWayView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity {
+    private ServerConnection mServerConnection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,22 +28,17 @@ public class MainActivity extends Activity {
             layout.setCoveredFadeColor(Color.TRANSPARENT);
         }
 
-        List<ScheduleItem> scheduleData = new ArrayList<ScheduleItem>();
-        for (int i = 0; i < 50; i++) {
-            scheduleData.add(new ScheduleItem("09:00", "10:25", "Event in schedule " + i));
-        }
+        mServerConnection = new ConnectionMock(this);
+
+        List<EventItem> scheduleEventsData = mServerConnection.getScheduleEvents();
+        List<EventItem> eventsData = mServerConnection.getEvents();
 
         ListView schedule = (ListView) findViewById(R.id.schedule_list);
-        ScheduleAdapter scheduleAdapter = new ScheduleAdapter(this, scheduleData);
+        ScheduleAdapter scheduleAdapter = new ScheduleAdapter(this, scheduleEventsData);
         schedule.setAdapter(scheduleAdapter);
 
-        List<EventItem> eventsData = new ArrayList<EventItem>();
-        for (int i = 0; i < 10; i++) {
-            eventsData.add(new EventItem());
-        }
-
         TwoWayView events = (TwoWayView) findViewById(R.id.events_list);
-        EventAdapter eventsAdapter = new EventAdapter(this, eventsData);
+        EventsAdapter eventsAdapter = new EventsAdapter(this, eventsData);
         events.setAdapter(eventsAdapter);
     }
 }

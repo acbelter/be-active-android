@@ -1,8 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-           android:id="@+id/event_view"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:src="@drawable/test_event">
-</ImageView>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+    <TextView
+        android:id="@+id/start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="2dp"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        tools:text="09:00"/>
+
+    <TextView
+        android:id="@+id/end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:gravity="center_horizontal"
+        android:layout_toRightOf="@id/start_time"
+        tools:text="10:25"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_below="@id/start_time"
+        android:textSize="16sp"
+        android:ellipsize="end"
+        tools:text="Invited lecture on Physics"/>
+</RelativeLayout>

@@ -9,11 +9,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class ScheduleAdapter extends ArrayAdapter<EventItem> {
+public class EventsAdapter extends ArrayAdapter<EventItem> {
     private LayoutInflater mInflater;
 
-    public ScheduleAdapter(Context context, List<EventItem> items) {
-        super(context, R.layout.item_schedule_event, items);
+    public EventsAdapter(Context context, List<EventItem> items) {
+        super(context, R.layout.item_event, items);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -21,21 +21,17 @@ public class ScheduleAdapter extends ArrayAdapter<EventItem> {
         TextView startTime;
         TextView endTime;
         TextView title;
-        TextView place;
-        TextView owner;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.item_schedule_event, null);
+            convertView = mInflater.inflate(R.layout.item_event, null);
 
             ViewHolder holder = new ViewHolder();
             holder.startTime = (TextView) convertView.findViewById(R.id.start_time);
             holder.endTime = (TextView) convertView.findViewById(R.id.end_time);
             holder.title = (TextView) convertView.findViewById(R.id.title);
-            holder.place = (TextView) convertView.findViewById(R.id.place);
-            holder.owner = (TextView) convertView.findViewById(R.id.owner);
             convertView.setTag(holder);
         }
 
@@ -44,8 +40,6 @@ public class ScheduleAdapter extends ArrayAdapter<EventItem> {
         holder.startTime.setText(item.getStartTimeString());
         holder.endTime.setText(item.getEndTimeString());
         holder.title.setText(item.getTitle());
-        holder.place.setText(item.getTitle());
-        holder.owner.setText(item.getOwner());
 
         // FIXME Высота TextView может быть больше чем минимальная высота...
         convertView.setMinimumHeight(item.getViewHeight());

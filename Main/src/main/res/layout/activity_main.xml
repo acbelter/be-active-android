@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        sothree:collapsedHeight="50dp"
+        sothree:collapsedHeight="40dp"
         sothree:shadowHeight="4dp"
         sothree:dragView="@+id/name">
 
@@ -33,8 +33,8 @@
             <TextView
                 android:id="@id/name"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="Events"
+                android:layout_height="40dp"
+                android:text="@string/events"
                 android:gravity="center"
                 android:textSize="18sp"/>
 
