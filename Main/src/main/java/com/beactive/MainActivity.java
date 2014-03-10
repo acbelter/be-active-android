@@ -1,9 +1,9 @@
 package com.beactive;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.ListView;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 
 import com.beactive.network.ConnectionMock;
 import com.beactive.network.ServerConnection;
@@ -13,8 +13,11 @@ import org.lucasr.twowayview.TwoWayView;
 
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
     private ServerConnection mServerConnection;
+    private WeekdaysPagerAdapter mPagerAdapter;
+    private ViewPager mViewPager;
+    private SchedulePreparator mSchedulePreparator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +33,42 @@ public class MainActivity extends Activity {
 
         mServerConnection = new ConnectionMock(this);
 
-        List<EventItem> scheduleEventsData = mServerConnection.getScheduleEvents();
+        mSchedulePreparator = new SchedulePreparator(mServerConnection.getScheduleEvents());
+
+        mViewPager = (ViewPager) findViewById(R.id.schedule_pager);
+        mPagerAdapter = new WeekdaysPagerAdapter(this, getSupportFragmentManager(), mSchedulePreparator);
+        mViewPager.setAdapter(mPagerAdapter);
+
         List<EventItem> eventsData = mServerConnection.getEvents();
-
-        ListView schedule = (ListView) findViewById(R.id.schedule_list);
-        ScheduleAdapter scheduleAdapter = new ScheduleAdapter(this, scheduleEventsData);
-        schedule.setAdapter(scheduleAdapter);
-
         TwoWayView events = (TwoWayView) findViewById(R.id.events_list);
         EventsAdapter eventsAdapter = new EventsAdapter(this, eventsData);
         events.setAdapter(eventsAdapter);
     }
+
+    // TODO
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                // This is called when the Home (Up) button is pressed in the action bar.
+//                // Create a simple intent that starts the hierarchical parent activity and
+//                // use NavUtils in the Support Package to ensure proper handling of Up.
+//                Intent upIntent = new Intent(this, MainActivity.class);
+//                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+//                    // This activity is not part of the application's task, so create a new task
+//                    // with a synthesized back stack.
+//                    TaskStackBuilder.from(this)
+//                            // If there are ancestor activities, they should be added here.
+//                            .addNextIntent(upIntent)
+//                            .startActivities();
+//                    finish();
+//                } else {
+//                    // This activity is part of the application's task, so simply
+//                    // navigate up to the hierarchical parent activity.
+//                    NavUtils.navigateUpTo(this, upIntent);
+//                }
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 }
