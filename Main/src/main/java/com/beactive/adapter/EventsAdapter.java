@@ -1,4 +1,4 @@
-package com.beactive;
+package com.beactive.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.beactive.R;
 
 import java.util.List;
 
@@ -40,9 +42,6 @@ public class EventsAdapter extends ArrayAdapter<EventItem> {
         holder.startTime.setText(item.getStartTimeString());
         holder.endTime.setText(item.getEndTimeString());
         holder.title.setText(item.getTitle());
-
-        // FIXME Высота TextView может быть больше чем минимальная высота...
-        convertView.setMinimumHeight(item.getViewHeight());
 
         return convertView;
     }

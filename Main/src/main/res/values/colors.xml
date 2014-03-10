@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<resources>
-    <color name="color_lecture">#FF99CC</color>
-    <color name="color_seminar">#CCFFFF</color>
-    <color name="color_yellow">#FFFF99</color>
-    <color name="color_leisure">#CCFFCC</color>
-</resources>

@@ -1,10 +1,11 @@
 package com.beactive.network;
 
-import com.beactive.EventItem;
+import com.beactive.adapter.BaseScheduleItem;
+import com.beactive.adapter.EventItem;
 
 import java.util.List;
 
 public interface ServerConnection {
-    List<EventItem> getScheduleEvents();
+    List<BaseScheduleItem> getSchedule();
     List<EventItem> getEvents();
 }

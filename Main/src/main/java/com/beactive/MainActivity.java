@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
+import com.beactive.adapter.EventItem;
+import com.beactive.adapter.EventsAdapter;
 import com.beactive.network.ConnectionMock;
 import com.beactive.network.ServerConnection;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -33,16 +35,16 @@ public class MainActivity extends FragmentActivity {
 
         mServerConnection = new ConnectionMock(this);
 
-        mSchedulePreparator = new SchedulePreparator(mServerConnection.getScheduleEvents());
+        mSchedulePreparator = new SchedulePreparator(mServerConnection.getSchedule());
 
         mViewPager = (ViewPager) findViewById(R.id.schedule_pager);
         mPagerAdapter = new WeekdaysPagerAdapter(this, getSupportFragmentManager(), mSchedulePreparator);
         mViewPager.setAdapter(mPagerAdapter);
 
-        List<EventItem> eventsData = mServerConnection.getEvents();
-        TwoWayView events = (TwoWayView) findViewById(R.id.events_list);
-        EventsAdapter eventsAdapter = new EventsAdapter(this, eventsData);
-        events.setAdapter(eventsAdapter);
+        List<EventItem> events = mServerConnection.getEvents();
+        TwoWayView eventsView = (TwoWayView) findViewById(R.id.events_list);
+        EventsAdapter eventsAdapter = new EventsAdapter(this, events);
+        eventsView.setAdapter(eventsAdapter);
     }
 
     // TODO

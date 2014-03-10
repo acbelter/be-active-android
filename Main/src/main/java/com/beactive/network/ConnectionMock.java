@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
-import com.beactive.EventItem;
 import com.beactive.R;
+import com.beactive.adapter.BaseScheduleItem;
+import com.beactive.adapter.EventItem;
 
 import org.json.JSONException;
 
@@ -24,7 +25,7 @@ public class ConnectionMock implements ServerConnection {
     }
 
     @Override
-    public List<EventItem> getScheduleEvents() {
+    public List<BaseScheduleItem> getSchedule() {
         try {
             String jsonStr = readToString(mResources.openRawResource(R.raw.schedule));
             return DataParser.parseScheduleFromJson(jsonStr);

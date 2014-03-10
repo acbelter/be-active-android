@@ -1,15 +1,15 @@
-package com.beactive;
+package com.beactive.adapter;
+
+import com.beactive.DateTimeUtils;
 
 public class EventItem {
-    private static final float MIN_EVENT_DURATION = 30*60*1000; // 30 min in millis
-    private static final int MIN_EVENT_HEIGHT = 100;
     protected long eventId;
     protected long startTime;
     protected long endTime;
     protected String place;
     protected String title;
     protected String owner;
-    protected EventType type;
+    protected ItemType type;
 
     public EventItem(long eventId, long startTime, long endTime) {
         this.eventId = eventId;
@@ -29,7 +29,7 @@ public class EventItem {
         this.owner = owner;
     }
 
-    public void setType(EventType type) {
+    public void setType(ItemType type) {
         this.type = type;
     }
 
@@ -53,16 +53,7 @@ public class EventItem {
         return owner;
     }
 
-    public EventType getType() {
+    public ItemType getType() {
         return type;
-    }
-
-    public int getViewHeight() {
-        float durationFactor = (endTime - startTime) / MIN_EVENT_DURATION;
-        if (durationFactor < 1) {
-            return MIN_EVENT_HEIGHT;
-        } else {
-            return (int) (durationFactor * MIN_EVENT_HEIGHT);
-        }
     }
 }

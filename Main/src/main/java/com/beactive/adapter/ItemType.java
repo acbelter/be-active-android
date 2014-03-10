@@ -1,6 +1,6 @@
-package com.beactive;
+package com.beactive.adapter;
 
-public enum EventType {
+public enum ItemType {
     LECTURE,
     SEMINAR,
     LAB,
@@ -8,7 +8,7 @@ public enum EventType {
     INVITED_LECTURE,
     CONCERT;
 
-    public static EventType parseFromInt(int code) {
+    public static ItemType parseFromInt(int code) {
         switch (code) {
             case 101: {
                 return LECTURE;
@@ -29,7 +29,7 @@ public enum EventType {
                 return CONCERT;
             }
             default: {
-                throw new IllegalArgumentException("Unsupported event code.");
+                throw new IllegalArgumentException("Unsupported type code.");
             }
         }
     }

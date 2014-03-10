@@ -6,13 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.beactive.adapter.BaseScheduleItem;
+import com.beactive.adapter.ScheduleAdapter;
+
 import java.util.List;
 
 public class ScheduleFragment extends ListFragment {
-    private List<EventItem> mScheduleEvents;
+    private List<BaseScheduleItem> mScheduleEvents;
     private ScheduleAdapter mScheduleAdapter;
 
-    public static ScheduleFragment newInstance(List<EventItem> scheduleEvents) {
+    public static ScheduleFragment newInstance(List<BaseScheduleItem> scheduleEvents) {
         ScheduleFragment scheduleFragment = new ScheduleFragment();
         scheduleFragment.mScheduleEvents = scheduleEvents;
         scheduleFragment.setRetainInstance(true);
