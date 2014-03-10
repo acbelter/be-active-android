@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:gravity="bottom"
         sothree:collapsedHeight="40dp"
-        sothree:shadowHeight="4dp"
+        sothree:shadowHeight="@dimen/shadow_width"
         sothree:dragView="@+id/name">
 
         <ListView

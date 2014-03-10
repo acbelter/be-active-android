@@ -53,6 +53,10 @@ public class EventItem {
         return owner;
     }
 
+    public EventType getType() {
+        return type;
+    }
+
     public int getViewHeight() {
         float durationFactor = (endTime - startTime) / MIN_EVENT_DURATION;
         if (durationFactor < 1) {

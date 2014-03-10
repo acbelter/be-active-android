@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
         SlidingUpPanelLayout layout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         if (layout != null) {
             layout.setShadowDrawable(getResources().getDrawable(R.drawable.above_shadow));
-            layout.setAnchorPoint(0.3f);
+            layout.setAnchorPoint(1.0f);
             layout.setCoveredFadeColor(Color.TRANSPARENT);
         }
 
