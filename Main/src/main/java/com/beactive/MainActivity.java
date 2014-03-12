@@ -19,7 +19,7 @@ public class MainActivity extends FragmentActivity {
     private ServerConnection mServerConnection;
     private WeekdaysPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
-    private SchedulePreparator mSchedulePreparator;
+    private Schedule mSchedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +35,10 @@ public class MainActivity extends FragmentActivity {
 
         mServerConnection = new ConnectionMock(this);
 
-        mSchedulePreparator = new SchedulePreparator(mServerConnection.getSchedule());
+        mSchedule = new Schedule(mServerConnection.getSchedule());
 
         mViewPager = (ViewPager) findViewById(R.id.schedule_pager);
-        mPagerAdapter = new WeekdaysPagerAdapter(this, getSupportFragmentManager(), mSchedulePreparator);
+        mPagerAdapter = new WeekdaysPagerAdapter(this, getSupportFragmentManager(), mSchedule);
         mViewPager.setAdapter(mPagerAdapter);
 
         List<EventItem> events = mServerConnection.getEvents();

@@ -1,8 +1,11 @@
 package com.beactive.adapter;
 
+import android.view.LayoutInflater;
+import android.view.View;
+
 import com.beactive.DateTimeUtils;
 
-public class EventItem {
+public class EventItem implements BaseScheduleItem {
     protected long eventId;
     protected long startTime;
     protected long endTime;
@@ -55,5 +58,23 @@ public class EventItem {
 
     public ItemType getType() {
         return type;
+    }
+
+    @Override
+    public int getViewHeight() {
+        // TODO
+        return 0;
+    }
+
+    @Override
+    public int getViewType() {
+        // FIXME
+        return -1;
+    }
+
+    @Override
+    public View getView(LayoutInflater inflater, View convertView) {
+        // TODO View in schedule
+        return null;
     }
 }
