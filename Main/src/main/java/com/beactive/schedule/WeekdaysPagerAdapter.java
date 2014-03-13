@@ -1,10 +1,12 @@
-package com.beactive;
+package com.beactive.schedule;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseIntArray;
+
+import com.beactive.R;
 
 import java.util.Calendar;
 

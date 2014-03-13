@@ -1,4 +1,4 @@
-package com.beactive;
+package com.beactive.schedule;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -6,8 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.beactive.adapter.BaseScheduleItem;
-import com.beactive.adapter.ScheduleAdapter;
+import com.beactive.R;
 
 import java.util.List;
 

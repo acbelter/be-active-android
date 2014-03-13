@@ -1,9 +1,13 @@
 package com.beactive.network;
 
-import com.beactive.adapter.BaseScheduleItem;
-import com.beactive.adapter.EventItem;
-import com.beactive.adapter.ItemType;
-import com.beactive.adapter.ScheduleItem;
+import android.util.Pair;
+
+import com.beactive.destination.DestinationItem;
+import com.beactive.destination.DestinationsTree;
+import com.beactive.schedule.BaseScheduleItem;
+import com.beactive.schedule.EventItem;
+import com.beactive.schedule.ItemType;
+import com.beactive.schedule.ScheduleItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,5 +61,43 @@ public class DataParser {
             events.add(event);
         }
         return events;
+    }
+
+    public static DestinationsTree parseDestinationsTreeFromJson(String jsonStr) throws JSONException {
+        if (jsonStr == null) {
+            return null;
+        }
+
+        JSONObject root = new JSONObject(jsonStr);
+        DestinationsTree destsTree = new DestinationsTree(root.getString("tree_title"));
+
+        JSONArray structure = root.getJSONArray("structure");
+        for (int i = 0; i < structure.length(); i++) {
+            JSONObject obj = structure.getJSONObject(i);
+            DestinationsTree.DestinationType type = DestinationsTree.DestinationType.valueOf(obj.getString("type"));
+            Integer style = obj.getInt("style");
+            destsTree.addStructureLevel(new Pair<DestinationsTree.DestinationType, Integer>(type, style));
+        }
+
+        JSONArray treeRoot = root.getJSONArray("tree");
+        destsTree.setTree(processTree(treeRoot));
+
+        return destsTree;
+    }
+
+    private static List<DestinationItem> processTree(JSONArray root) throws JSONException {
+        if (root == null) {
+            return new ArrayList<DestinationItem>(0);
+        }
+
+        List<DestinationItem> children = new ArrayList<DestinationItem>(root.length());
+        for (int i = 0; i < root.length(); i++) {
+            JSONObject child = root.getJSONObject(i);
+            DestinationItem item = new DestinationItem(child.getString("title"));
+            item.setImageLink(child.getString("image"));
+            item.setElements(processTree(child.getJSONArray("elements")));
+            children.add(item);
+        }
+        return children;
     }
 }

@@ -1,4 +1,4 @@
-package com.beactive.adapter;
+package com.beactive.schedule;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -5,8 +5,9 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.beactive.R;
-import com.beactive.adapter.BaseScheduleItem;
-import com.beactive.adapter.EventItem;
+import com.beactive.destination.DestinationsTree;
+import com.beactive.schedule.BaseScheduleItem;
+import com.beactive.schedule.EventItem;
 
 import org.json.JSONException;
 
@@ -50,6 +51,20 @@ public class ConnectionMock implements ServerConnection {
         return null;
     }
 
+    @Override
+    public DestinationsTree getDestinationsTree() {
+        try {
+            String jsonStr = readToString(mResources.openRawResource(R.raw.destinations));
+            return DataParser.parseDestinationsTreeFromJson(jsonStr);
+        } catch (IOException e) {
+            Log.e(TAG, "Can't open destinations from resources.");
+        } catch (JSONException e) {
+            Log.e(TAG, "Can't parse destinations from resources.");
+        }
+        return null;
+    }
+
+
     private static String readToString(InputStream is) throws IOException {
         if (is == null) {
             return null;
@@ -75,5 +90,4 @@ public class ConnectionMock implements ServerConnection {
 
         return builder.toString();
     }
-
 }

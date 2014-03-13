@@ -1,9 +1,9 @@
-package com.beactive.adapter;
+package com.beactive.schedule;
 
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.beactive.DateTimeUtils;
+import com.beactive.util.DateTimeUtils;
 
 public class EventItem implements BaseScheduleItem {
     protected long eventId;

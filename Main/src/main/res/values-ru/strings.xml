@@ -13,4 +13,9 @@
         <item>Суббота</item>
         <item>Воскресенье</item>
     </string-array>
+
+    <string name="title_faculties">Мой факультет</string>
+    <string name="title_courses">Мой курс</string>
+    <string name="title_groups">Моя группа</string>
+    <string name="title_departments">Моя кафедра</string>
 </resources>

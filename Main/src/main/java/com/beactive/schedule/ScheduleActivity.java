@@ -1,21 +1,23 @@
-package com.beactive;
+package com.beactive.schedule;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
-import com.beactive.adapter.EventItem;
-import com.beactive.adapter.EventsAdapter;
+import com.beactive.R;
+import com.beactive.destination.SelectDestinationActivity;
 import com.beactive.network.ConnectionMock;
 import com.beactive.network.ServerConnection;
+import com.beactive.util.PrefUtils;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.lucasr.twowayview.TwoWayView;
 
 import java.util.List;
 
-public class MainActivity extends FragmentActivity {
+public class ScheduleActivity extends FragmentActivity {
     private ServerConnection mServerConnection;
     private WeekdaysPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
@@ -24,7 +26,14 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        if (!PrefUtils.isPrefExists()) {
+            Intent intent = new Intent(this, SelectDestinationActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+        setContentView(R.layout.activity_schedule);
 
         SlidingUpPanelLayout layout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         if (layout != null) {
@@ -55,7 +64,7 @@ public class MainActivity extends FragmentActivity {
 //                // This is called when the Home (Up) button is pressed in the action bar.
 //                // Create a simple intent that starts the hierarchical parent activity and
 //                // use NavUtils in the Support Package to ensure proper handling of Up.
-//                Intent upIntent = new Intent(this, MainActivity.class);
+//                Intent upIntent = new Intent(this, ScheduleActivity.class);
 //                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
 //                    // This activity is not part of the application's task, so create a new task
 //                    // with a synthesized back stack.

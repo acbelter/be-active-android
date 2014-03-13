@@ -1,4 +1,4 @@
-package com.beactive.adapter;
+package com.beactive.schedule;
 
 public enum ItemType {
     LECTURE,

@@ -1,4 +1,4 @@
-package com.beactive.adapter;
+package com.beactive.schedule;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.beactive.DateTimeUtils;
 import com.beactive.R;
+import com.beactive.util.DateTimeUtils;
 
 public class ScheduleItem implements BaseScheduleItem {
     protected long eventId;

@@ -1,11 +1,6 @@
-package com.beactive;
+package com.beactive.schedule;
 
 import android.util.SparseArray;
-
-import com.beactive.adapter.BaseScheduleItem;
-import com.beactive.adapter.EventItem;
-import com.beactive.adapter.LeisureScheduleItem;
-import com.beactive.adapter.ScheduleItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;

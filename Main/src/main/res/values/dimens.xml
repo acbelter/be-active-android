@@ -2,4 +2,5 @@
 
 <resources>
     <dimen name="shadow_width">4dp</dimen>
+    <dimen name="grid_image_size">120dp</dimen>
 </resources>

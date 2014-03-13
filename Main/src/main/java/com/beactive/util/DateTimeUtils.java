@@ -1,4 +1,4 @@
-package com.beactive;
+package com.beactive.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
