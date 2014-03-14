@@ -1,6 +1,6 @@
 package com.beactive.destination;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public class DestinationItem {
     private String mTitle;
     private String mImageLink;
-    private Drawable mImage;
+    private Bitmap mImage;
     private List<DestinationItem> mElements;
 
     public DestinationItem(String title) {
@@ -26,15 +26,19 @@ public class DestinationItem {
         }
     }
 
+    public List<DestinationItem> getElements() {
+        return mElements;
+    }
+
     public String getTitle() {
         return mTitle;
     }
 
-    public Drawable getImage() {
+    public Bitmap getImage() {
         return mImage;
     }
 
-    public void setImage(Drawable mImage) {
+    public void setImage(Bitmap mImage) {
         this.mImage = mImage;
     }
 

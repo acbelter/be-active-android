@@ -1,7 +1,5 @@
 package com.beactive.network;
 
-import android.util.Pair;
-
 import com.beactive.destination.DestinationItem;
 import com.beactive.destination.DestinationsTree;
 import com.beactive.schedule.BaseScheduleItem;
@@ -69,14 +67,19 @@ public class DataParser {
         }
 
         JSONObject root = new JSONObject(jsonStr);
-        DestinationsTree destsTree = new DestinationsTree(root.getString("tree_title"));
+        DestinationsTree destsTree = new DestinationsTree(root.getString("title"));
 
         JSONArray structure = root.getJSONArray("structure");
+        JSONObject obj;
+        int type;
+        String title;
+        int style;
         for (int i = 0; i < structure.length(); i++) {
-            JSONObject obj = structure.getJSONObject(i);
-            DestinationsTree.DestinationType type = DestinationsTree.DestinationType.valueOf(obj.getString("type"));
-            Integer style = obj.getInt("style");
-            destsTree.addStructureLevel(new Pair<DestinationsTree.DestinationType, Integer>(type, style));
+            obj = structure.getJSONObject(i);
+            type = obj.getInt("type");
+            title = obj.getString("title");
+            style = obj.getInt("style");
+            destsTree.addStructureLevel(new DestinationsTree.StructureLevel(type, title, style));
         }
 
         JSONArray treeRoot = root.getJSONArray("tree");
@@ -91,11 +94,24 @@ public class DataParser {
         }
 
         List<DestinationItem> children = new ArrayList<DestinationItem>(root.length());
+        JSONObject child;
+        DestinationItem item;
+        List<DestinationItem> elements;
         for (int i = 0; i < root.length(); i++) {
-            JSONObject child = root.getJSONObject(i);
-            DestinationItem item = new DestinationItem(child.getString("title"));
-            item.setImageLink(child.getString("image"));
-            item.setElements(processTree(child.getJSONArray("elements")));
+            child = root.getJSONObject(i);
+            item = new DestinationItem(child.getString("title"));
+
+            if (!child.isNull("image")) {
+                item.setImageLink(child.getString("image"));
+            }
+
+            if (!child.isNull("elements")) {
+                elements = processTree(child.getJSONArray("elements"));
+            } else {
+                elements = null;
+            }
+
+            item.setElements(elements);
             children.add(item);
         }
         return children;

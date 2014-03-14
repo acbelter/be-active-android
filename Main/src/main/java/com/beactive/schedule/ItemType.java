@@ -29,7 +29,7 @@ public enum ItemType {
                 return CONCERT;
             }
             default: {
-                throw new IllegalArgumentException("Unsupported type code.");
+                throw new IllegalArgumentException("Unsupported type code: " + code);
             }
         }
     }

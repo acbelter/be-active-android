@@ -1,21 +1,25 @@
 {
-  "tree_title": "МФТИ",
+  "title": "МФТИ",
   "structure":[
     {
-      "type": "faculties",
+      "type": 0,
+      "title": "Мои факультеты",
       "style": 0
     },
     {
-      "type": "courses",
+      "type": 1,
+      "title": "Мои курсы",
       "style": 1
     },
     {
-      "type": "groups",
+      "type": 2,
+      "title": "Мои группы",
       "style": 1
     },
     {
-      "type": "departments",
-      "style": 2
+      "type": 3,
+      "title": "Мои кафедры",
+      "style": 1
     }
   ],
   

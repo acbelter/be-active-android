@@ -13,9 +13,4 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
-
-    <string name="title_faculties">My faculty</string>
-    <string name="title_courses">My course</string>
-    <string name="title_groups">My group</string>
-    <string name="title_departments">My department</string>
 </resources>

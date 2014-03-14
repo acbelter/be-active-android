@@ -19,7 +19,7 @@
         tools:text="Title"/>
 
     <GridView
-        android:id="@+id/image_grid"
+        android:id="@+id/image_grid_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

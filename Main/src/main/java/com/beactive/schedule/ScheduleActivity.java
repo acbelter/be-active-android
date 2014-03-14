@@ -5,12 +5,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
 import com.beactive.R;
 import com.beactive.destination.SelectDestinationActivity;
 import com.beactive.network.ConnectionMock;
 import com.beactive.network.ServerConnection;
-import com.beactive.util.PrefUtils;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.lucasr.twowayview.TwoWayView;
@@ -22,15 +22,20 @@ public class ScheduleActivity extends FragmentActivity {
     private WeekdaysPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
     private Schedule mSchedule;
+    // FIXME Variable for test
+    private String mToastText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!PrefUtils.isPrefExists()) {
+        // FIXME Testing implementation
+        if (getIntent().getStringExtra("schedule") == null) {
             Intent intent = new Intent(this, SelectDestinationActivity.class);
             startActivity(intent);
             finish();
+        } else {
+            mToastText = getIntent().getStringExtra("schedule");
         }
 
         setContentView(R.layout.activity_schedule);
@@ -54,6 +59,15 @@ public class ScheduleActivity extends FragmentActivity {
         TwoWayView eventsView = (TwoWayView) findViewById(R.id.events_list);
         EventsAdapter eventsAdapter = new EventsAdapter(this, events);
         eventsView.setAdapter(eventsAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // FIXME Testing implementation
+        if (mToastText != null) {
+            Toast.makeText(this, mToastText, Toast.LENGTH_LONG).show();
+        }
     }
 
     // TODO
