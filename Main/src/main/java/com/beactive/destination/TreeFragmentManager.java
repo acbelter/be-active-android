@@ -4,12 +4,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import com.beactive.R;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 
 // FIXME Use Singleton pattern for this class
-// TODO Implement back navigation (using addToBackStack())
-// TODO Add animation for fragments
 public class TreeFragmentManager implements OnDestinationsLevelListener {
     private FragmentManager mFragmentManager;
     private DestinationsTree mDestsTree;
@@ -41,13 +41,13 @@ public class TreeFragmentManager implements OnDestinationsLevelListener {
         }
 
         FragmentTransaction ft = mFragmentManager.beginTransaction();
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
         DestinationsTree.StructureLevel level = mDestsTree.getStructureLevel(mCurrentDepth);
         List<DestinationItem> root = mDestsTree.getTree();
         Fragment f = getNewSelectFragment(level, root);
 
         ft.replace(mContainerViewId, f, Integer.toString(mCurrentDepth));
-        //ft.addToBackStack(null);
         ft.commit();
 
         mSelectionStarted = true;
@@ -73,13 +73,15 @@ public class TreeFragmentManager implements OnDestinationsLevelListener {
         if (hasNextSelectFragment()) {
             mCurrentDepth++;
             FragmentTransaction ft = mFragmentManager.beginTransaction();
+            ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
+                    R.anim.slide_in_right, R.anim.slide_out_left);
 
             DestinationsTree.StructureLevel level = mDestsTree.getStructureLevel(mCurrentDepth);
             List<DestinationItem> items = mCurrentSelection.getElements();
             Fragment f = getNewSelectFragment(level, items);
 
             ft.replace(mContainerViewId, f, Integer.toString(mCurrentDepth));
-            //ft.addToBackStack(null);
+            ft.addToBackStack(null);
             ft.commit();
             return true;
         }
@@ -114,6 +116,9 @@ public class TreeFragmentManager implements OnDestinationsLevelListener {
 
     @Override
     public void onLevelCancelled(int type) {
+        if (mCurrentDepth > 0) {
+            mCurrentDepth--;
+        }
         mSelectedDestinations.remove(type);
     }
 }

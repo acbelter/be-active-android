@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DestinationsTree {
     public static final int TYPE_FACULTIES = 0;
-    public static final int TYPE_COURCES = 1;
+    public static final int TYPE_COURSES = 1;
     public static final int TYPE_GROUPS = 2;
     public static final int TYPE_DEPARTMENTS = 3;
 
@@ -63,5 +63,25 @@ public class DestinationsTree {
 
     public String getTreeTitle() {
         return mTreeTitle;
+    }
+
+    public static String getTypeDescription(int type) {
+        switch (type) {
+            case TYPE_FACULTIES: {
+                return "faculties";
+            }
+            case TYPE_COURSES: {
+                return "courses";
+            }
+            case TYPE_GROUPS: {
+                return "groups";
+            }
+            case TYPE_DEPARTMENTS: {
+                return "departments";
+            }
+            default: {
+                throw new IllegalArgumentException("Unsupported level type: " + type);
+            }
+        }
     }
 }

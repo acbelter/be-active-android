@@ -47,10 +47,10 @@ public class SelectDestinationActivity extends FragmentActivity implements OnSel
     private String selectionResultToString(LinkedHashMap<Integer, DestinationItem> selectionResult) {
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<Integer, DestinationItem> entry : selectionResult.entrySet()) {
-            builder.append(entry.getKey())
+            builder.append(DestinationsTree.getTypeDescription(entry.getKey()))
                     .append(":")
                     .append(entry.getValue().getTitle())
-                    .append("\n");
+                    .append(";");
         }
         return builder.toString();
     }
