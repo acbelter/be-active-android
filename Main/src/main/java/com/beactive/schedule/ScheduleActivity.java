@@ -3,21 +3,24 @@ package com.beactive.schedule;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.beactive.R;
 import com.beactive.destination.SelectDestinationActivity;
 import com.beactive.network.ConnectionMock;
 import com.beactive.network.ServerConnection;
+import com.beactive.newevent.NewEventActivity;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.lucasr.twowayview.TwoWayView;
 
 import java.util.List;
 
-public class ScheduleActivity extends FragmentActivity {
+public class ScheduleActivity extends ActionBarActivity {
     private ServerConnection mServerConnection;
     private WeekdaysPagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
@@ -67,6 +70,25 @@ public class ScheduleActivity extends FragmentActivity {
         // FIXME Testing implementation
         if (mToastText != null) {
             Toast.makeText(this, mToastText, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_schedule, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_add_event: {
+                Intent intent = new Intent(this, NewEventActivity.class);
+                startActivity(intent);
+                return true;
+            } default: {
+                return super.onOptionsItemSelected(item);
+            }
         }
     }
 

@@ -3,6 +3,9 @@
 <resources>
     <string name="app_name">beActive</string>
     <string name="events">Events</string>
+    <string name="add_event">Add event</string>
+    <string name="settings">Settings</string>
+    <string name="search">Search</string>
 
     <string-array name="weekdays">
         <item>Monday</item>
@@ -12,5 +15,10 @@
         <item>Friday</item>
         <item>Saturday</item>
         <item>Sunday</item>
+    </string-array>
+
+    <string-array name="events_categories">
+        <item>Coming</item>
+        <item>Popular</item>
     </string-array>
 </resources>

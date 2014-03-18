@@ -2,7 +2,7 @@ package com.beactive.destination;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 
 import com.beactive.R;
 import com.beactive.network.ConnectionMock;
@@ -12,7 +12,7 @@ import com.beactive.schedule.ScheduleActivity;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class SelectDestinationActivity extends FragmentActivity implements OnSelectionFinishedListener {
+public class SelectDestinationActivity extends ActionBarActivity implements OnSelectionFinishedListener {
     private ServerConnection mServerConnection;
     private DestinationsTree mDestinationsTree;
     private TreeFragmentManager mTreeFragmentManager;
