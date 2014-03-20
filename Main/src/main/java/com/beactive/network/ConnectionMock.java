@@ -6,8 +6,9 @@ import android.util.Log;
 
 import com.beactive.R;
 import com.beactive.destination.DestinationsTree;
-import com.beactive.schedule.BaseScheduleItem;
+import com.beactive.newevent.ComingEventItem;
 import com.beactive.schedule.EventItem;
+import com.beactive.schedule.IScheduleItem;
 
 import org.json.JSONException;
 
@@ -26,10 +27,10 @@ public class ConnectionMock implements ServerConnection {
     }
 
     @Override
-    public List<BaseScheduleItem> getSchedule() {
+    public List<IScheduleItem> getSchedule() {
         try {
             String jsonStr = readToString(mResources.openRawResource(R.raw.schedule));
-            return DataParser.parseScheduleFromJson(jsonStr);
+            return ResponseDataParser.parseScheduleFromJson(jsonStr);
         } catch (IOException e) {
             Log.e(TAG, "Can't open schedule from resources.");
         } catch (JSONException e) {
@@ -42,7 +43,7 @@ public class ConnectionMock implements ServerConnection {
     public List<EventItem> getEvents() {
         try {
             String jsonStr = readToString(mResources.openRawResource(R.raw.events));
-            return DataParser.parseEventsFromJson(jsonStr);
+            return ResponseDataParser.parseEventsFromJson(jsonStr);
         } catch (IOException e) {
             Log.e(TAG, "Can't open events from resources.");
         } catch (JSONException e) {
@@ -52,10 +53,23 @@ public class ConnectionMock implements ServerConnection {
     }
 
     @Override
+    public List<ComingEventItem> getComingEvents() {
+        try {
+            String jsonStr = readToString(mResources.openRawResource(R.raw.coming_events));
+            return ResponseDataParser.parseComingEventsFromJson(jsonStr);
+        } catch (IOException e) {
+            Log.e(TAG, "Can't open coming events from resources.");
+        } catch (JSONException e) {
+            Log.e(TAG, "Can't parse coming events from resources.");
+        }
+        return null;
+    }
+
+    @Override
     public DestinationsTree getDestinationsTree() {
         try {
             String jsonStr = readToString(mResources.openRawResource(R.raw.destinations));
-            return DataParser.parseDestinationsTreeFromJson(jsonStr);
+            return ResponseDataParser.parseDestinationsTreeFromJson(jsonStr);
         } catch (IOException e) {
             Log.e(TAG, "Can't open destinations from resources.");
         } catch (JSONException e) {
@@ -63,7 +77,6 @@ public class ConnectionMock implements ServerConnection {
         }
         return null;
     }
-
 
     private static String readToString(InputStream is) throws IOException {
         if (is == null) {

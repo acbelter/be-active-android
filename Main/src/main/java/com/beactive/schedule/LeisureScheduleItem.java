@@ -5,18 +5,18 @@ import android.view.View;
 
 import com.beactive.R;
 
-public class LeisureScheduleItem implements BaseScheduleItem {
-    protected long startTime;
-    protected long endTime;
+public class LeisureScheduleItem implements IScheduleItem {
+    protected long mStartTime;
+    protected long mEndTime;
 
     public LeisureScheduleItem(long startTime, long endTime) {
-        this.startTime = startTime;
-        this.endTime = endTime;
+        mStartTime = startTime;
+        mEndTime = endTime;
     }
 
     @Override
     public int getViewHeight() {
-        float durationFactor = (float) (endTime - startTime) / MIN_DURATION;
+        float durationFactor = (float) (mEndTime - mStartTime) / MIN_DURATION;
         // FIXME Test implementation
         return (int) (durationFactor * MIN_HEIGHT);
     }

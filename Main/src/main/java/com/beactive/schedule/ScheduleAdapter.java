@@ -8,17 +8,17 @@ import android.widget.ArrayAdapter;
 
 import java.util.List;
 
-public class ScheduleAdapter extends ArrayAdapter<BaseScheduleItem> {
+public class ScheduleAdapter extends ArrayAdapter<IScheduleItem> {
     private LayoutInflater mInflater;
 
-    public ScheduleAdapter(Context context, List<BaseScheduleItem> items) {
+    public ScheduleAdapter(Context context, List<IScheduleItem> items) {
         super(context, 0, items);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getViewTypeCount() {
-        return BaseScheduleItem.ITEM_TYPES_COUNT;
+        return IScheduleItem.ITEM_TYPES_COUNT;
     }
 
     @Override

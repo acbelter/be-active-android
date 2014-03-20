@@ -2,8 +2,9 @@ package com.beactive.network;
 
 import com.beactive.destination.DestinationItem;
 import com.beactive.destination.DestinationsTree;
-import com.beactive.schedule.BaseScheduleItem;
+import com.beactive.newevent.ComingEventItem;
 import com.beactive.schedule.EventItem;
+import com.beactive.schedule.IScheduleItem;
 import com.beactive.schedule.ItemType;
 import com.beactive.schedule.ScheduleItem;
 
@@ -14,14 +15,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataParser {
-    public static List<BaseScheduleItem> parseScheduleFromJson(String jsonStr) throws JSONException {
+public class ResponseDataParser {
+    public static List<IScheduleItem> parseScheduleFromJson(String jsonStr) throws JSONException {
         if (jsonStr == null) {
-            return new ArrayList<BaseScheduleItem>(0);
+            return new ArrayList<IScheduleItem>(0);
         }
 
         JSONArray jsonData = new JSONObject(jsonStr).getJSONArray("schedule");
-        List<BaseScheduleItem> schedule = new ArrayList<BaseScheduleItem>(jsonData.length());
+        List<IScheduleItem> schedule = new ArrayList<IScheduleItem>(jsonData.length());
         for (int i = 0; i < jsonData.length(); i++) {
             long id = jsonData.getJSONObject(i).getLong("id");
             long startTime = jsonData.getJSONObject(i).getLong("start");
@@ -51,6 +52,30 @@ public class DataParser {
             long endTime = jsonData.getJSONObject(i).getLong("end");
 
             EventItem event = new EventItem(id, startTime, endTime);
+            event.setPlace(jsonData.getJSONObject(i).getString("place"));
+            event.setTitle(jsonData.getJSONObject(i).getString("title"));
+            event.setOwner(jsonData.getJSONObject(i).getString("owner"));
+            event.setType(ItemType.parseFromInt(jsonData.getJSONObject(i).getInt("type")));
+
+            events.add(event);
+        }
+        return events;
+    }
+
+    // FIXME This testing implementation doesn't parse image links
+    public static List<ComingEventItem> parseComingEventsFromJson(String jsonStr) throws JSONException {
+        if (jsonStr == null) {
+            return new ArrayList<ComingEventItem>(0);
+        }
+
+        JSONArray jsonData = new JSONObject(jsonStr).getJSONArray("events");
+        ArrayList<ComingEventItem> events = new ArrayList<ComingEventItem>(jsonData.length());
+        for (int i = 0; i < jsonData.length(); i++) {
+            long id = jsonData.getJSONObject(i).getLong("id");
+            long startTime = jsonData.getJSONObject(i).getLong("start");
+            long endTime = jsonData.getJSONObject(i).getLong("end");
+
+            ComingEventItem event = new ComingEventItem(id, startTime, endTime);
             event.setPlace(jsonData.getJSONObject(i).getString("place"));
             event.setTitle(jsonData.getJSONObject(i).getString("title"));
             event.setOwner(jsonData.getJSONObject(i).getString("owner"));

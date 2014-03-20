@@ -11,10 +11,10 @@ import com.beactive.R;
 import java.util.List;
 
 public class ScheduleFragment extends ListFragment {
-    private List<BaseScheduleItem> mScheduleEvents;
+    private List<IScheduleItem> mScheduleEvents;
     private ScheduleAdapter mScheduleAdapter;
 
-    public static ScheduleFragment newInstance(List<BaseScheduleItem> scheduleEvents) {
+    public static ScheduleFragment newInstance(List<IScheduleItem> scheduleEvents) {
         ScheduleFragment scheduleFragment = new ScheduleFragment();
         scheduleFragment.mScheduleEvents = scheduleEvents;
         scheduleFragment.setRetainInstance(true);

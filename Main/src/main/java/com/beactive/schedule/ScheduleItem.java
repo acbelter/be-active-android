@@ -7,74 +7,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beactive.R;
-import com.beactive.util.DateTimeUtils;
+import com.beactive.core.BaseItem;
 
-public class ScheduleItem implements BaseScheduleItem {
-    protected long eventId;
-    protected long startTime;
-    protected long endTime;
-    protected String place;
-    protected String title;
-    protected String owner;
-    protected ItemType type;
-
+public class ScheduleItem extends BaseItem implements IScheduleItem {
     public ScheduleItem(long eventId, long startTime, long endTime) {
-        this.eventId = eventId;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public void setType(ItemType type) {
-        this.type = type;
-    }
-
-    public long getStartTime() {
-        return startTime;
-    }
-
-    public long getEndTime() {
-        return endTime;
-    }
-
-    public String getStartTimeString() {
-        return DateTimeUtils.parseTime(startTime);
-    }
-
-    public String getEndTimeString() {
-        return DateTimeUtils.parseTime(endTime);
-    }
-
-    public String getPlace() {
-        return place;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public ItemType getType() {
-        return type;
+        super(eventId, startTime, endTime);
     }
 
     @Override
     public int getViewHeight() {
-        float durationFactor = (float) (endTime - startTime) / MIN_DURATION;
+        float durationFactor = (float) (mEndTime - mStartTime) / MIN_DURATION;
         if (durationFactor < 1) {
             return MIN_HEIGHT;
         } else {
@@ -112,12 +54,12 @@ public class ScheduleItem implements BaseScheduleItem {
         }
 
         ViewHolder holder = (ViewHolder) convertView.getTag();
-        holder.timeLayout.setBackgroundColor(getTimeLayoutColor(type));
+        holder.timeLayout.setBackgroundColor(getTimeLayoutColor(mType));
         holder.startTime.setText(getStartTimeString());
         holder.endTime.setText(getEndTimeString());
-        holder.title.setText(title);
-        holder.place.setText(place);
-        holder.owner.setText(owner);
+        holder.title.setText(mTitle);
+        holder.place.setText(mPlace);
+        holder.owner.setText(mOwner);
 
         // FIXME Height of title TextView can be more than the minimal height of item...
         convertView.setMinimumHeight(getViewHeight());

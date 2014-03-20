@@ -8,19 +8,19 @@ import java.util.List;
 
 public class Schedule {
     private static Calendar sCalendar = Calendar.getInstance();
-    private SparseArray<List<BaseScheduleItem>> mSchedule;
+    private SparseArray<List<IScheduleItem>> mSchedule;
 
-    public Schedule(List<BaseScheduleItem> scheduleItems) {
-        mSchedule = new SparseArray<List<BaseScheduleItem>>(7);
-        mSchedule.append(Calendar.MONDAY, new ArrayList<BaseScheduleItem>());
-        mSchedule.append(Calendar.TUESDAY, new ArrayList<BaseScheduleItem>());
-        mSchedule.append(Calendar.WEDNESDAY, new ArrayList<BaseScheduleItem>());
-        mSchedule.append(Calendar.THURSDAY, new ArrayList<BaseScheduleItem>());
-        mSchedule.append(Calendar.FRIDAY, new ArrayList<BaseScheduleItem>());
-        mSchedule.append(Calendar.SATURDAY, new ArrayList<BaseScheduleItem>());
-        mSchedule.append(Calendar.SUNDAY, new ArrayList<BaseScheduleItem>());
+    public Schedule(List<IScheduleItem> scheduleItems) {
+        mSchedule = new SparseArray<List<IScheduleItem>>(7);
+        mSchedule.append(Calendar.MONDAY, new ArrayList<IScheduleItem>());
+        mSchedule.append(Calendar.TUESDAY, new ArrayList<IScheduleItem>());
+        mSchedule.append(Calendar.WEDNESDAY, new ArrayList<IScheduleItem>());
+        mSchedule.append(Calendar.THURSDAY, new ArrayList<IScheduleItem>());
+        mSchedule.append(Calendar.FRIDAY, new ArrayList<IScheduleItem>());
+        mSchedule.append(Calendar.SATURDAY, new ArrayList<IScheduleItem>());
+        mSchedule.append(Calendar.SUNDAY, new ArrayList<IScheduleItem>());
 
-        BaseScheduleItem item;
+        IScheduleItem item;
         for (int i = 0; i < scheduleItems.size(); i++) {
             item = scheduleItems.get(i);
             if (item.getClass() == ScheduleItem.class) {
@@ -38,13 +38,13 @@ public class Schedule {
         }
     }
 
-    public List<BaseScheduleItem> getScheduleFor(int weekday) {
+    public List<IScheduleItem> getScheduleFor(int weekday) {
         return mSchedule.get(weekday);
     }
 
     // TODO Insert LeisureScheduleItem after last ScheduleItem
-    private void insertLeisureItems(List<BaseScheduleItem> schedule) {
-        BaseScheduleItem current, next;
+    private void insertLeisureItems(List<IScheduleItem> schedule) {
+        IScheduleItem current, next;
         for (int i = 0; i < schedule.size() - 1; i++) {
             current = schedule.get(i);
             next = schedule.get(i + 1);

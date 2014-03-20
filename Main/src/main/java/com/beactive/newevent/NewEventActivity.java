@@ -11,11 +11,12 @@ import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.beactive.R;
+import com.beactive.network.ConnectionMock;
+import com.beactive.network.ServerConnection;
 
 public class NewEventActivity extends ActionBarActivity implements SearchView.OnQueryTextListener {
+    private ServerConnection mServerConnection;
     private SearchView mSearchView;
-    private PagerSlidingTabStrip mTabs;
-    private ViewPager mPager;
     private NewEventPagerAdapter mAdapter;
 
     @Override
@@ -25,13 +26,15 @@ public class NewEventActivity extends ActionBarActivity implements SearchView.On
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mTabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mAdapter = new NewEventPagerAdapter(getSupportFragmentManager(),
-                getResources().getStringArray(R.array.events_categories));
+        mServerConnection = new ConnectionMock(this);
 
-        mPager.setAdapter(mAdapter);
-        mTabs.setViewPager(mPager);
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+
+        mAdapter = new NewEventPagerAdapter(getResources(), getSupportFragmentManager(), mServerConnection);
+
+        pager.setAdapter(mAdapter);
+        tabs.setViewPager(pager);
     }
 
     @Override
