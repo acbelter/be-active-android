@@ -8,6 +8,7 @@
     <string name="search">Поиск</string>
     <string name="add_to_schedule">Добавить в расписание</string>
     <string name="more">ЕЩЁ</string>
+    <string name="loading">Загрузка...</string>
 
     <string-array name="weekdays">
         <item>Понедельник</item>

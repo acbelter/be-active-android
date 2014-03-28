@@ -14,8 +14,7 @@ public class DestinationsTree {
     // TODO For the future
     public static final int STYLE_IMAGE_AND_TEXT = 2;
 
-    private String mTreeTitle;
-    // FIXME Use a onw class rather than Pair
+    private int mRootId;
     private List<StructureLevel> mStructure;
     private List<DestinationItem> mTree;
 
@@ -31,8 +30,8 @@ public class DestinationsTree {
         }
     }
 
-    public DestinationsTree(String treeTitle) {
-        mTreeTitle = treeTitle;
+    public DestinationsTree(int rootId) {
+        mRootId = rootId;
         mStructure = new ArrayList<StructureLevel>();
         mTree = new ArrayList<DestinationItem>();
     }
@@ -59,10 +58,6 @@ public class DestinationsTree {
 
     public void setTree(List<DestinationItem> tree) {
         mTree = tree;
-    }
-
-    public String getTreeTitle() {
-        return mTreeTitle;
     }
 
     public static String getTypeDescription(int type) {

@@ -1,23 +1,21 @@
 package com.beactive.newevent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.beactive.R;
-import com.beactive.network.ConnectionMock;
-import com.beactive.network.ServerConnection;
+import com.beactive.core.BeActiveActivity;
 
-public class NewEventActivity extends ActionBarActivity implements SearchView.OnQueryTextListener {
-    private ServerConnection mServerConnection;
+public class NewEventActivity extends BeActiveActivity implements SearchView.OnQueryTextListener {
     private SearchView mSearchView;
-    private NewEventPagerAdapter mAdapter;
+    private NewEventPagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +24,12 @@ public class NewEventActivity extends ActionBarActivity implements SearchView.On
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mServerConnection = new ConnectionMock(this);
-
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
 
-        mAdapter = new NewEventPagerAdapter(getResources(), getSupportFragmentManager(), mServerConnection);
+        mPagerAdapter = new NewEventPagerAdapter(getResources(), getSupportFragmentManager());
 
-        pager.setAdapter(mAdapter);
+        pager.setAdapter(mPagerAdapter);
         tabs.setViewPager(pager);
     }
 
@@ -71,6 +67,11 @@ public class NewEventActivity extends ActionBarActivity implements SearchView.On
     @Override
     public boolean onQueryTextChange(String s) {
         return false;
+    }
+
+    @Override
+    public void onServiceCallback(int requestId, Intent requestIntent, int resultCode, Bundle data) {
+        // TODO
     }
 
     // TODO For card style in fragments?

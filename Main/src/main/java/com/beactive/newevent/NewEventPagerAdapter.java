@@ -6,18 +6,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.beactive.R;
-import com.beactive.network.ServerConnection;
 
 public class NewEventPagerAdapter extends FragmentPagerAdapter {
-    private ServerConnection mServerConnection;
     private String[] mTitles;
 
-    public NewEventPagerAdapter(Resources res,
-                                FragmentManager fragmentManager,
-                                ServerConnection conn) {
+    public NewEventPagerAdapter(Resources res, FragmentManager fragmentManager) {
         super(fragmentManager);
         mTitles = res.getStringArray(R.array.events_categories);
-        mServerConnection = conn;
     }
 
     @Override
@@ -34,7 +29,7 @@ public class NewEventPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0: {
-                return ComingEventsFragment.newInstance(mServerConnection);
+                return ComingEventsFragment.newInstance();
             }
             case 1: {
                 return new PopularEventsFragment();

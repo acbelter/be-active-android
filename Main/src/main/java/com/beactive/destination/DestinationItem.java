@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DestinationItem {
-    private String mTitle;
-    private String mImageLink;
-    private Bitmap mImage;
-    private List<DestinationItem> mElements;
+    protected String mTitle;
+    protected String mImageLink;
+    protected Bitmap mImage;
+    protected List<DestinationItem> mElements;
 
     public DestinationItem(String title) {
         mTitle = title;

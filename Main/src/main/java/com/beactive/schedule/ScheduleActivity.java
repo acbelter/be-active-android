@@ -1,44 +1,62 @@
 package com.beactive.schedule;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.beactive.R;
+import com.beactive.core.BeActiveActivity;
 import com.beactive.destination.SelectDestinationActivity;
-import com.beactive.network.ConnectionMock;
-import com.beactive.network.ServerConnection;
+import com.beactive.network.ResponseParser;
+import com.beactive.network.command.GetEventsCommand;
+import com.beactive.network.command.GetScheduleCommand;
 import com.beactive.newevent.NewEventActivity;
+import com.beactive.util.PrefUtils;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.json.JSONException;
 import org.lucasr.twowayview.TwoWayView;
 
 import java.util.List;
 
-public class ScheduleActivity extends ActionBarActivity {
-    private ServerConnection mServerConnection;
+public class ScheduleActivity extends BeActiveActivity {
+    private SharedPreferences mPrefs;
     private WeekdaysPagerAdapter mPagerAdapter;
-    private ViewPager mViewPager;
+    private ViewPager mSchedulePager;
     private Schedule mSchedule;
-    // FIXME Variable for test
-    private String mToastText;
+    private TwoWayView mEventsList;
+
+    private int mScheduleRequestId = -1;
+    private int mEentsRequestId = -1;
+
+    private int mRootId;
+    private String mDestinationsPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // FIXME Testing implementation
-        if (getIntent().getStringExtra("schedule") == null) {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (!mPrefs.contains(PrefUtils.KEY_ROOT_ID) ||
+                !mPrefs.contains(PrefUtils.KEY_DESTINATIONS_PATH)) {
+            // Show configuration screen
             Intent intent = new Intent(this, SelectDestinationActivity.class);
             startActivity(intent);
             finish();
         } else {
-            mToastText = getIntent().getStringExtra("schedule");
+            mRootId = mPrefs.getInt(PrefUtils.KEY_ROOT_ID, -1);
+            mDestinationsPath = mPrefs.getString(PrefUtils.KEY_DESTINATIONS_PATH, null);
         }
 
         setContentView(R.layout.activity_schedule);
@@ -50,26 +68,98 @@ public class ScheduleActivity extends ActionBarActivity {
             layout.setCoveredFadeColor(Color.TRANSPARENT);
         }
 
-        mServerConnection = new ConnectionMock(this);
+        mSchedulePager = (ViewPager) findViewById(R.id.schedule_pager);
+        mEventsList = (TwoWayView) findViewById(R.id.events_list);
 
-        mSchedule = new Schedule(mServerConnection.getSchedule());
+        if (mPrefs.contains(PrefUtils.KEY_SCHEDULE)) {
+            runPrepareScheduleTask(mPrefs.getString(PrefUtils.KEY_SCHEDULE, null));
+        }
+    }
 
-        mViewPager = (ViewPager) findViewById(R.id.schedule_pager);
-        mPagerAdapter = new WeekdaysPagerAdapter(this, getSupportFragmentManager(), mSchedule);
-        mViewPager.setAdapter(mPagerAdapter);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // FIXME Just for testing
+//        SharedPreferences.Editor editor = mPrefs.edit();
+//        editor.remove(PrefUtils.KEY_ROOT_ID);
+//        editor.remove(PrefUtils.KEY_DESTINATIONS_PATH);
+//        editor.remove(PrefUtils.KEY_SCHEDULE);
+//        editor.commit();
+    }
 
-        List<EventItem> events = mServerConnection.getEvents();
-        TwoWayView eventsView = (TwoWayView) findViewById(R.id.events_list);
-        EventsAdapter eventsAdapter = new EventsAdapter(this, events);
-        eventsView.setAdapter(eventsAdapter);
+    private void runPrepareScheduleTask(final String scheduleJson) {
+        new AsyncTask<String, Void, List<IScheduleItem>>() {
+            @Override
+            protected void onPreExecute() {
+                // Save schedule
+                if (scheduleJson != null) {
+                    mPrefs.edit().putString(PrefUtils.KEY_SCHEDULE, scheduleJson).commit();
+                }
+            }
+
+            @Override
+            protected List<IScheduleItem> doInBackground(String... params) {
+                try {
+                    return ResponseParser.parseScheduleFromJson(params[0]);
+                } catch (JSONException e) {
+                    // TODO Translate message
+                    Toast.makeText(getApplicationContext(), "Schedule parse error.", Toast.LENGTH_LONG);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(List<IScheduleItem> scheduleItems) {
+                mSchedule = new Schedule(scheduleItems);
+                mPagerAdapter = new WeekdaysPagerAdapter(ScheduleActivity.this,
+                        getSupportFragmentManager(), mSchedule);
+                mSchedulePager.setAdapter(mPagerAdapter);
+            }
+        }.execute(scheduleJson);
+    }
+
+    private void runPrepareEventsTask(String eventsJson) {
+        new AsyncTask<String, Void, List<EventItem>>() {
+            @Override
+            protected List<EventItem> doInBackground(String... params) {
+                try {
+                    return ResponseParser.parseEventsFromJson(params[0]);
+                } catch (JSONException e) {
+                    // TODO Translate message
+                    Toast.makeText(getApplicationContext(), "Events parse error.", Toast.LENGTH_LONG);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(List<EventItem> eventItems) {
+                EventsAdapter eventsAdapter = new EventsAdapter(ScheduleActivity.this, eventItems);
+                mEventsList.setAdapter(eventsAdapter);
+            }
+        }.execute(eventsJson);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // FIXME Testing implementation
-        if (mToastText != null) {
-            Toast.makeText(this, mToastText, Toast.LENGTH_LONG).show();
+        if (!mPrefs.contains(PrefUtils.KEY_SCHEDULE)) {
+            if (mScheduleRequestId == -1) {
+                // Download new schedule
+                LoadingDialogFragment loading = new LoadingDialogFragment();
+                loading.show(getSupportFragmentManager(), LoadingDialogFragment.class.getSimpleName());
+                mScheduleRequestId = getNetworkServiceHelper().getSchedule(mRootId, mDestinationsPath);
+            } else if (!getNetworkServiceHelper().isPending(mScheduleRequestId)) {
+                dismissLoadingDialog();
+            }
+        }
+    }
+
+    private void dismissLoadingDialog() {
+        LoadingDialogFragment loading =
+                (LoadingDialogFragment) getSupportFragmentManager()
+                        .findFragmentByTag(LoadingDialogFragment.class.getSimpleName());
+        if (loading != null) {
+            loading.dismiss();
         }
     }
 
@@ -89,6 +179,46 @@ public class ScheduleActivity extends ActionBarActivity {
             } default: {
                 return super.onOptionsItemSelected(item);
             }
+        }
+    }
+
+    @Override
+    public void onServiceCallback(int requestId, Intent requestIntent, int resultCode, Bundle data) {
+        if (getNetworkServiceHelper().checkCommandClass(requestIntent, GetScheduleCommand.class)) {
+            if (resultCode == GetScheduleCommand.RESPONSE_SUCCESS) {
+                dismissLoadingDialog();
+                runPrepareScheduleTask(data.getString("json"));
+
+                // Now start loading events
+                // TODO
+            } else if (resultCode == GetScheduleCommand.RESPONSE_PROGRESS) {
+                // TODO For the future
+            } else if (resultCode == GetScheduleCommand.RESPONSE_FAILURE) {
+                // FIXME Fix message
+                Toast.makeText(getApplicationContext(), "Can't load schedule.", Toast.LENGTH_LONG).show();
+                dismissLoadingDialog();
+            }
+        }
+
+        if (getNetworkServiceHelper().checkCommandClass(requestIntent, GetEventsCommand.class)) {
+            if (resultCode == GetEventsCommand.RESPONSE_SUCCESS) {
+                runPrepareEventsTask(data.getString("json"));
+            } else if (resultCode == GetEventsCommand.RESPONSE_PROGRESS) {
+                // TODO For the future
+            } else if (resultCode == GetScheduleCommand.RESPONSE_FAILURE) {
+                // FIXME Fix message
+                Toast.makeText(getApplicationContext(), "Can't load events.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    // TODO Move this class to BeActiveActivity?
+    public static class LoadingDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            ProgressDialog progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getString(R.string.loading));
+            return progressDialog;
         }
     }
 

@@ -1,6 +1,7 @@
 package com.beactive.network;
 
 import com.beactive.destination.DestinationItem;
+import com.beactive.destination.DestinationRootItem;
 import com.beactive.destination.DestinationsTree;
 import com.beactive.newevent.ComingEventItem;
 import com.beactive.schedule.EventItem;
@@ -15,7 +16,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResponseDataParser {
+public class ResponseParser {
     public static List<IScheduleItem> parseScheduleFromJson(String jsonStr) throws JSONException {
         if (jsonStr == null) {
             return new ArrayList<IScheduleItem>(0);
@@ -86,13 +87,30 @@ public class ResponseDataParser {
         return events;
     }
 
+    public static List<DestinationRootItem> parseDestinationsRootFromJson(String jsonStr) throws JSONException {
+        if (jsonStr == null) {
+            return new ArrayList<DestinationRootItem>(0);
+        }
+
+        JSONArray jsonData = new JSONObject(jsonStr).getJSONArray("root");
+        ArrayList<DestinationRootItem> items = new ArrayList<DestinationRootItem>(jsonData.length());
+        for (int i = 0; i < jsonData.length(); i++) {
+            int id = jsonData.getJSONObject(i).getInt("id");
+            String title = jsonData.getJSONObject(i).getString("title");
+
+            DestinationRootItem item = new DestinationRootItem(id, title);
+            items.add(item);
+        }
+        return items;
+    }
+
     public static DestinationsTree parseDestinationsTreeFromJson(String jsonStr) throws JSONException {
         if (jsonStr == null) {
             return null;
         }
 
         JSONObject root = new JSONObject(jsonStr);
-        DestinationsTree destsTree = new DestinationsTree(root.getString("title"));
+        DestinationsTree tree = new DestinationsTree(root.getInt("id"));
 
         JSONArray structure = root.getJSONArray("structure");
         JSONObject obj;
@@ -104,13 +122,13 @@ public class ResponseDataParser {
             type = obj.getInt("type");
             title = obj.getString("title");
             style = obj.getInt("style");
-            destsTree.addStructureLevel(new DestinationsTree.StructureLevel(type, title, style));
+            tree.addStructureLevel(new DestinationsTree.StructureLevel(type, title, style));
         }
 
         JSONArray treeRoot = root.getJSONArray("tree");
-        destsTree.setTree(processTree(treeRoot));
+        tree.setTree(processTree(treeRoot));
 
-        return destsTree;
+        return tree;
     }
 
     private static List<DestinationItem> processTree(JSONArray root) throws JSONException {

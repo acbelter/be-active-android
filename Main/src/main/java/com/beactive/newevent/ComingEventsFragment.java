@@ -8,16 +8,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.beactive.R;
-import com.beactive.network.ServerConnection;
 
 public class ComingEventsFragment extends ListFragment {
-    private ServerConnection mServerConnection;
     private ComingEventsAdapter mAdapter;
     private Button mMoreButton;
 
-    public static ComingEventsFragment newInstance(ServerConnection conn) {
+    public static ComingEventsFragment newInstance() {
         ComingEventsFragment comingEventsFragment = new ComingEventsFragment();
-        comingEventsFragment.mServerConnection = conn;
         return comingEventsFragment;
     }
 
@@ -37,7 +34,8 @@ public class ComingEventsFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAdapter = new ComingEventsAdapter(getActivity(), mServerConnection.getComingEvents());
-        setListAdapter(mAdapter);
+        // TODO
+//        mAdapter = new ComingEventsAdapter(getActivity(), null);
+//        setListAdapter(mAdapter);
     }
 }
