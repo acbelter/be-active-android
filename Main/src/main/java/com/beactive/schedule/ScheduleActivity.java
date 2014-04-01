@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
@@ -27,17 +26,21 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import org.json.JSONException;
 import org.lucasr.twowayview.TwoWayView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ScheduleActivity extends BeActiveActivity {
-    private SharedPreferences mPrefs;
-    private WeekdaysPagerAdapter mPagerAdapter;
     private ViewPager mSchedulePager;
-    private Schedule mSchedule;
     private TwoWayView mEventsList;
 
+    private SharedPreferences mPrefs;
+
+    private Schedule mSchedule;
+    private ArrayList<EventItem> mEvents;
+    private WeekdaysPagerAdapter mPagerAdapter;
+    private EventsAdapter mEventsAdapter;
+
     private int mScheduleRequestId = -1;
-    private int mEentsRequestId = -1;
+    private int mEventsRequestId = -1;
 
     private int mRootId;
     private String mDestinationsPath;
@@ -71,72 +74,65 @@ public class ScheduleActivity extends BeActiveActivity {
         mSchedulePager = (ViewPager) findViewById(R.id.schedule_pager);
         mEventsList = (TwoWayView) findViewById(R.id.events_list);
 
-        if (mPrefs.contains(PrefUtils.KEY_SCHEDULE)) {
-            runPrepareScheduleTask(mPrefs.getString(PrefUtils.KEY_SCHEDULE, null));
+        if (savedInstanceState == null) {
+            if (mPrefs.contains(PrefUtils.KEY_SCHEDULE)) {
+                String scheduleJson = mPrefs.getString(PrefUtils.KEY_SCHEDULE, null);
+                if (scheduleJson != null) {
+                    try {
+                        ArrayList<IScheduleItem> schedule = ResponseParser.parseScheduleFromJson(scheduleJson);
+                        if (schedule != null) {
+                            setupSchedule(new Schedule(schedule));
+                        }
+                    } catch (JSONException e) {
+                        // TODO Translate message
+                        Toast.makeText(getApplicationContext(), "Can't open schedule from preferences.", Toast.LENGTH_LONG);
+                    }
+                }
+            }
+
+            // Now start loading events
+            mEventsRequestId = getNetworkServiceHelper().getEvents(mRootId);
+        } else {
+            mScheduleRequestId = savedInstanceState.getInt("schedule_request_id", -1);
+            mEventsRequestId = savedInstanceState.getInt("events_request_id", -1);
+
+            Schedule schedule = (Schedule) getLastCustomNonConfigurationInstance();
+            if (schedule != null) {
+                setupSchedule(schedule);
+            }
+
+            ArrayList<EventItem> events = savedInstanceState.getParcelableArrayList("events");
+            if (events == null) {
+                events = new ArrayList<EventItem>(0);
+            }
+            setupEvents(events);
         }
     }
 
+    private void setupSchedule(Schedule schedule) {
+        mSchedule = schedule;
+        mPagerAdapter = new WeekdaysPagerAdapter(ScheduleActivity.this,
+                getSupportFragmentManager(), mSchedule);
+        mSchedulePager.setAdapter(mPagerAdapter);
+    }
+
+    private void setupEvents(ArrayList<EventItem> events) {
+        mEvents = events;
+        mEventsAdapter = new EventsAdapter(ScheduleActivity.this, events);
+        mEventsList.setAdapter(mEventsAdapter);
+    }
+
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // FIXME Just for testing
-//        SharedPreferences.Editor editor = mPrefs.edit();
-//        editor.remove(PrefUtils.KEY_ROOT_ID);
-//        editor.remove(PrefUtils.KEY_DESTINATIONS_PATH);
-//        editor.remove(PrefUtils.KEY_SCHEDULE);
-//        editor.commit();
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("schedule_request_id", mScheduleRequestId);
+        outState.putInt("events_request_id", mEventsRequestId);
+        outState.putParcelableArrayList("events", mEvents);
     }
 
-    private void runPrepareScheduleTask(final String scheduleJson) {
-        new AsyncTask<String, Void, List<IScheduleItem>>() {
-            @Override
-            protected void onPreExecute() {
-                // Save schedule
-                if (scheduleJson != null) {
-                    mPrefs.edit().putString(PrefUtils.KEY_SCHEDULE, scheduleJson).commit();
-                }
-            }
-
-            @Override
-            protected List<IScheduleItem> doInBackground(String... params) {
-                try {
-                    return ResponseParser.parseScheduleFromJson(params[0]);
-                } catch (JSONException e) {
-                    // TODO Translate message
-                    Toast.makeText(getApplicationContext(), "Schedule parse error.", Toast.LENGTH_LONG);
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(List<IScheduleItem> scheduleItems) {
-                mSchedule = new Schedule(scheduleItems);
-                mPagerAdapter = new WeekdaysPagerAdapter(ScheduleActivity.this,
-                        getSupportFragmentManager(), mSchedule);
-                mSchedulePager.setAdapter(mPagerAdapter);
-            }
-        }.execute(scheduleJson);
-    }
-
-    private void runPrepareEventsTask(String eventsJson) {
-        new AsyncTask<String, Void, List<EventItem>>() {
-            @Override
-            protected List<EventItem> doInBackground(String... params) {
-                try {
-                    return ResponseParser.parseEventsFromJson(params[0]);
-                } catch (JSONException e) {
-                    // TODO Translate message
-                    Toast.makeText(getApplicationContext(), "Events parse error.", Toast.LENGTH_LONG);
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(List<EventItem> eventItems) {
-                EventsAdapter eventsAdapter = new EventsAdapter(ScheduleActivity.this, eventItems);
-                mEventsList.setAdapter(eventsAdapter);
-            }
-        }.execute(eventsJson);
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return mSchedule;
     }
 
     @Override
@@ -176,7 +172,19 @@ public class ScheduleActivity extends BeActiveActivity {
                 Intent intent = new Intent(this, NewEventActivity.class);
                 startActivity(intent);
                 return true;
-            } default: {
+            }
+            case R.id.item_clear_cache: {
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.remove(PrefUtils.KEY_ROOT_ID);
+                editor.remove(PrefUtils.KEY_DESTINATIONS_PATH);
+                editor.remove(PrefUtils.KEY_SCHEDULE);
+                editor.commit();
+
+                // FIXME Fix message
+                Toast.makeText(getApplicationContext(), "Cache cleared.", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            default: {
                 return super.onOptionsItemSelected(item);
             }
         }
@@ -187,22 +195,45 @@ public class ScheduleActivity extends BeActiveActivity {
         if (getNetworkServiceHelper().checkCommandClass(requestIntent, GetScheduleCommand.class)) {
             if (resultCode == GetScheduleCommand.RESPONSE_SUCCESS) {
                 dismissLoadingDialog();
-                runPrepareScheduleTask(data.getString("json"));
 
-                // Now start loading events
-                // TODO
+                String scheduleJson = data.getString("schedule_json");
+                // Save schedule
+                if (scheduleJson != null) {
+                    mPrefs.edit().putString(PrefUtils.KEY_SCHEDULE, scheduleJson).commit();
+                }
+
+                ArrayList<IScheduleItem> schedule = data.getParcelableArrayList("schedule");
+                if (schedule != null) {
+                    setupSchedule(new Schedule(schedule));
+
+                    // Now start loading events
+                    if (mEvents == null) {
+                        mEventsRequestId = getNetworkServiceHelper().getEvents(mRootId);
+                    }
+                } else {
+                    // FIXME Fix message
+                    Toast.makeText(getApplicationContext(), "Can't load schedule.", Toast.LENGTH_LONG).show();
+                }
             } else if (resultCode == GetScheduleCommand.RESPONSE_PROGRESS) {
                 // TODO For the future
             } else if (resultCode == GetScheduleCommand.RESPONSE_FAILURE) {
+                dismissLoadingDialog();
                 // FIXME Fix message
                 Toast.makeText(getApplicationContext(), "Can't load schedule.", Toast.LENGTH_LONG).show();
-                dismissLoadingDialog();
             }
         }
 
         if (getNetworkServiceHelper().checkCommandClass(requestIntent, GetEventsCommand.class)) {
             if (resultCode == GetEventsCommand.RESPONSE_SUCCESS) {
-                runPrepareEventsTask(data.getString("json"));
+                ArrayList<EventItem> events = data.getParcelableArrayList("events");
+                if (events != null) {
+                    setupEvents(events);
+                } else {
+                    events = new ArrayList<EventItem>(0);
+                    setupEvents(events);
+                    // FIXME Fix message
+                    Toast.makeText(getApplicationContext(), "Can't load events.", Toast.LENGTH_LONG).show();
+                }
             } else if (resultCode == GetEventsCommand.RESPONSE_PROGRESS) {
                 // TODO For the future
             } else if (resultCode == GetScheduleCommand.RESPONSE_FAILURE) {

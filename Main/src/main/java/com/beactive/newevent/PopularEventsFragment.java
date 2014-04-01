@@ -22,6 +22,8 @@ public class PopularEventsFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_popular_events, container, false);
         mMoreButton = (Button) view.findViewById(R.id.more_button);
+        // FIXME For testing
+        mMoreButton.setEnabled(false);
         return view;
     }
 }

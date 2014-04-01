@@ -1,6 +1,8 @@
 package com.beactive.schedule;
 
 import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -8,11 +10,29 @@ import android.widget.TextView;
 
 import com.beactive.R;
 import com.beactive.core.BaseItem;
+import com.beactive.core.ItemType;
 
 public class ScheduleItem extends BaseItem implements IScheduleItem {
     public ScheduleItem(long eventId, long startTime, long endTime) {
         super(eventId, startTime, endTime);
     }
+
+    private ScheduleItem(Parcel in) {
+        super(in);
+    }
+
+    public static final Parcelable.Creator<ScheduleItem> CREATOR =
+            new Parcelable.Creator<ScheduleItem>() {
+                @Override
+                public ScheduleItem createFromParcel(Parcel in) {
+                    return new ScheduleItem(in);
+                }
+
+                @Override
+                public ScheduleItem[] newArray(int size) {
+                    return new ScheduleItem[size];
+                }
+            };
 
     @Override
     public int getViewHeight() {

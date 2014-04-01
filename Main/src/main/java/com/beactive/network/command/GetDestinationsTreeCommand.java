@@ -9,7 +9,10 @@ import android.os.ResultReceiver;
 import android.util.Log;
 
 import com.beactive.R;
+import com.beactive.network.ResponseParser;
 import com.beactive.util.Utils;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 
@@ -34,9 +37,14 @@ public class GetDestinationsTreeCommand extends BaseNetworkServiceCommand {
             String json = Utils.readToString(context.getResources().openRawResource(R.raw.destinations));
 
             if (json != null) {
-                Bundle data = new Bundle();
-                data.putString("json", json);
-                notifySuccess(data);
+                try {
+                    Bundle data = new Bundle();
+                    data.putParcelable("destinations_tree",
+                            ResponseParser.parseDestinationsTreeFromJson(json));
+                    notifySuccess(data);
+                } catch (JSONException e) {
+                    notifyFailure(null);
+                }
             } else {
                 notifyFailure(null);
             }

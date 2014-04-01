@@ -12,7 +12,7 @@ import java.util.List;
 // FIXME Use Singleton pattern for this class
 public class TreeFragmentManager implements OnDestinationsLevelListener {
     private FragmentManager mFragmentManager;
-    private DestinationsTree mDestsTree;
+    private DestinationsTree mTree;
     private int mTreeDepth;
     private int mCurrentDepth;
     // Map<type, DestinationItem>
@@ -26,7 +26,7 @@ public class TreeFragmentManager implements OnDestinationsLevelListener {
                                OnSelectionFinishedListener selectionFinishedListener) {
         mFragmentManager = fragmentManager;
         mContainerViewId = containerViewId;
-        mDestsTree = tree;
+        mTree = tree;
         mCallback = selectionFinishedListener;
         mTreeDepth = tree.getStructure().size();
         mSelectedDestinations = new LinkedHashMap<Integer, DestinationItem>(mTreeDepth);
@@ -36,15 +36,15 @@ public class TreeFragmentManager implements OnDestinationsLevelListener {
      * @return True, if selection was started successfully, otherwise return false.
      */
     public boolean startSelection() {
-        if (mDestsTree.isEmpty() || mSelectionStarted) {
+        if (mTree.isEmpty() || mSelectionStarted) {
             return false;
         }
 
         FragmentTransaction ft = mFragmentManager.beginTransaction();
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
-        DestinationsTree.StructureLevel level = mDestsTree.getStructureLevel(mCurrentDepth);
-        List<DestinationItem> root = mDestsTree.getTree();
+        DestinationsTree.StructureLevel level = mTree.getStructureLevel(mCurrentDepth);
+        List<DestinationItem> root = mTree.getTree();
         Fragment f = getNewSelectFragment(level, root);
 
         ft.replace(mContainerViewId, f, Integer.toString(mCurrentDepth));
@@ -76,7 +76,7 @@ public class TreeFragmentManager implements OnDestinationsLevelListener {
             ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
                     R.anim.slide_in_right, R.anim.slide_out_left);
 
-            DestinationsTree.StructureLevel level = mDestsTree.getStructureLevel(mCurrentDepth);
+            DestinationsTree.StructureLevel level = mTree.getStructureLevel(mCurrentDepth);
             List<DestinationItem> items = mCurrentSelection.getElements();
             Fragment f = getNewSelectFragment(level, items);
 

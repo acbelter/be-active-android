@@ -32,6 +32,10 @@ public class WeekdaysPagerAdapter extends FragmentStatePagerAdapter {
         mSchedule = schedule;
     }
 
+    public Schedule getSchedule() {
+        return mSchedule;
+    }
+
     @Override
     public Fragment getItem(int pos) {
         return ScheduleFragment.newInstance(mSchedule.getScheduleFor(sPosWeekdayMap.get(pos)));

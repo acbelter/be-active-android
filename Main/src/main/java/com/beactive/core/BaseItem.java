@@ -1,9 +1,11 @@
 package com.beactive.core;
 
-import com.beactive.schedule.ItemType;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.beactive.util.DateTimeUtils;
 
-public class BaseItem {
+public abstract class BaseItem implements Parcelable {
     protected long mEventId;
     protected long mStartTime;
     protected long mEndTime;
@@ -16,6 +18,32 @@ public class BaseItem {
         mEventId = eventId;
         mStartTime = startTime;
         mEndTime = endTime;
+    }
+
+    protected BaseItem(Parcel in) {
+        mEventId = in.readLong();
+        mStartTime = in.readLong();
+        mEndTime = in.readLong();
+        mPlace = in.readString();
+        mTitle = in.readString();
+        mOwner = in.readString();
+        mType = (ItemType) in.readSerializable();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeLong(mEventId);
+        out.writeLong(mStartTime);
+        out.writeLong(mEndTime);
+        out.writeString(mPlace);
+        out.writeString(mTitle);
+        out.writeString(mOwner);
+        out.writeSerializable(mType);
     }
 
     public long getEventId() {
@@ -77,5 +105,4 @@ public class BaseItem {
     public void setType(ItemType type) {
         mType = type;
     }
-
 }

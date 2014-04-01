@@ -1,5 +1,7 @@
 package com.beactive.schedule;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -12,6 +14,35 @@ public class LeisureScheduleItem implements IScheduleItem {
     public LeisureScheduleItem(long startTime, long endTime) {
         mStartTime = startTime;
         mEndTime = endTime;
+    }
+
+    private LeisureScheduleItem(Parcel in) {
+        mStartTime = in.readLong();
+        mEndTime = in.readLong();
+    }
+
+    public static final Parcelable.Creator<LeisureScheduleItem> CREATOR =
+            new Parcelable.Creator<LeisureScheduleItem>() {
+                @Override
+                public LeisureScheduleItem createFromParcel(Parcel in) {
+                    return new LeisureScheduleItem(in);
+                }
+
+                @Override
+                public LeisureScheduleItem[] newArray(int size) {
+                    return new LeisureScheduleItem[size];
+                }
+            };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeLong(mStartTime);
+        out.writeLong(mEndTime);
     }
 
     @Override

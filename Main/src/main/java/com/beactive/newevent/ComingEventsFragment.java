@@ -28,6 +28,8 @@ public class ComingEventsFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_coming_events, container, false);
         mMoreButton = (Button) view.findViewById(R.id.more_button);
+        // FIXME For testing
+        mMoreButton.setEnabled(false);
         return view;
     }
 

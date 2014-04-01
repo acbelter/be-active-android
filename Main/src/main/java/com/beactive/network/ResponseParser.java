@@ -1,12 +1,13 @@
 package com.beactive.network;
 
+import com.beactive.core.ItemType;
 import com.beactive.destination.DestinationItem;
 import com.beactive.destination.DestinationRootItem;
 import com.beactive.destination.DestinationsTree;
 import com.beactive.newevent.ComingEventItem;
+import com.beactive.newevent.PopularEventItem;
 import com.beactive.schedule.EventItem;
 import com.beactive.schedule.IScheduleItem;
-import com.beactive.schedule.ItemType;
 import com.beactive.schedule.ScheduleItem;
 
 import org.json.JSONArray;
@@ -14,16 +15,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ResponseParser {
-    public static List<IScheduleItem> parseScheduleFromJson(String jsonStr) throws JSONException {
+    public static ArrayList<IScheduleItem> parseScheduleFromJson(String jsonStr) throws JSONException {
         if (jsonStr == null) {
             return new ArrayList<IScheduleItem>(0);
         }
 
         JSONArray jsonData = new JSONObject(jsonStr).getJSONArray("schedule");
-        List<IScheduleItem> schedule = new ArrayList<IScheduleItem>(jsonData.length());
+        ArrayList<IScheduleItem> schedule = new ArrayList<IScheduleItem>(jsonData.length());
         for (int i = 0; i < jsonData.length(); i++) {
             long id = jsonData.getJSONObject(i).getLong("id");
             long startTime = jsonData.getJSONObject(i).getLong("start");
@@ -40,7 +40,7 @@ public class ResponseParser {
         return schedule;
     }
 
-    public static List<EventItem> parseEventsFromJson(String jsonStr) throws JSONException {
+    public static ArrayList<EventItem> parseEventsFromJson(String jsonStr) throws JSONException {
         if (jsonStr == null) {
             return new ArrayList<EventItem>(0);
         }
@@ -64,7 +64,7 @@ public class ResponseParser {
     }
 
     // FIXME This testing implementation doesn't parse image links
-    public static List<ComingEventItem> parseComingEventsFromJson(String jsonStr) throws JSONException {
+    public static ArrayList<ComingEventItem> parseComingEventsFromJson(String jsonStr) throws JSONException {
         if (jsonStr == null) {
             return new ArrayList<ComingEventItem>(0);
         }
@@ -87,7 +87,31 @@ public class ResponseParser {
         return events;
     }
 
-    public static List<DestinationRootItem> parseDestinationsRootFromJson(String jsonStr) throws JSONException {
+    // FIXME This testing implementation doesn't parse image links
+    public static ArrayList<PopularEventItem> parsePopularEventsFromJson(String jsonStr) throws JSONException {
+        if (jsonStr == null) {
+            return new ArrayList<PopularEventItem>(0);
+        }
+
+        JSONArray jsonData = new JSONObject(jsonStr).getJSONArray("events");
+        ArrayList<PopularEventItem> events = new ArrayList<PopularEventItem>(jsonData.length());
+        for (int i = 0; i < jsonData.length(); i++) {
+            long id = jsonData.getJSONObject(i).getLong("id");
+            long startTime = jsonData.getJSONObject(i).getLong("start");
+            long endTime = jsonData.getJSONObject(i).getLong("end");
+
+            PopularEventItem event = new PopularEventItem(id, startTime, endTime);
+            event.setPlace(jsonData.getJSONObject(i).getString("place"));
+            event.setTitle(jsonData.getJSONObject(i).getString("title"));
+            event.setOwner(jsonData.getJSONObject(i).getString("owner"));
+            event.setType(ItemType.parseFromInt(jsonData.getJSONObject(i).getInt("type")));
+
+            events.add(event);
+        }
+        return events;
+    }
+
+    public static ArrayList<DestinationRootItem> parseDestinationsRootFromJson(String jsonStr) throws JSONException {
         if (jsonStr == null) {
             return new ArrayList<DestinationRootItem>(0);
         }
@@ -131,15 +155,15 @@ public class ResponseParser {
         return tree;
     }
 
-    private static List<DestinationItem> processTree(JSONArray root) throws JSONException {
+    private static ArrayList<DestinationItem> processTree(JSONArray root) throws JSONException {
         if (root == null) {
             return new ArrayList<DestinationItem>(0);
         }
 
-        List<DestinationItem> children = new ArrayList<DestinationItem>(root.length());
+        ArrayList<DestinationItem> children = new ArrayList<DestinationItem>(root.length());
         JSONObject child;
         DestinationItem item;
-        List<DestinationItem> elements;
+        ArrayList<DestinationItem> elements;
         for (int i = 0; i < root.length(); i++) {
             child = root.getJSONObject(i);
             item = new DestinationItem(child.getString("title"));

@@ -14,6 +14,8 @@ import com.beactive.R;
 import java.util.List;
 
 public class TextListFragment extends Fragment implements AdapterView.OnItemClickListener {
+    public static final String TAG = TextListFragment.class.getSimpleName();
+
     private DestinationsTree.StructureLevel mLevel;
     private ListView mListView;
     private TextListAdapter mAdapter;

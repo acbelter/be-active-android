@@ -54,7 +54,7 @@ public abstract class BaseNetworkServiceCommand implements Parcelable {
     // FIXME Just for testing!
     public void networkSimulation() {
         try {
-            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

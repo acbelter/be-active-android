@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
@@ -12,16 +11,13 @@ import android.widget.Toast;
 
 import com.beactive.R;
 import com.beactive.core.BeActiveActivity;
-import com.beactive.network.ResponseParser;
 import com.beactive.network.command.GetDestinationsRootCommand;
 import com.beactive.network.command.GetDestinationsTreeCommand;
 import com.beactive.schedule.ScheduleActivity;
 import com.beactive.util.PrefUtils;
 
-import org.json.JSONException;
-
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SelectDestinationActivity extends BeActiveActivity implements OnSelectionFinishedListener {
@@ -38,15 +34,34 @@ public class SelectDestinationActivity extends BeActiveActivity implements OnSel
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        SharedPreferences.Editor editor = mPrefs.edit();
-        editor.remove(PrefUtils.KEY_ROOT_ID);
-        editor.remove(PrefUtils.KEY_DESTINATIONS_PATH);
-        editor.remove(PrefUtils.KEY_SCHEDULE);
-        editor.commit();
+//        if (savedInstanceState == null) {
+            SharedPreferences.Editor editor = mPrefs.edit();
+            editor.remove(PrefUtils.KEY_ROOT_ID);
+            editor.remove(PrefUtils.KEY_DESTINATIONS_PATH);
+            editor.remove(PrefUtils.KEY_SCHEDULE);
+            editor.commit();
+//        } else {
+//            mDestinationsRootRequestId = savedInstanceState.getInt("destinations_root_request_id", -1);
+//            mDestinationsTreeRequestId = savedInstanceState.getInt("destinations_tree_request_id", -1);
+//            mDestinationsTree = savedInstanceState.getParcelable("destinations_tree");
+//            mTreeFragmentManager = (TreeFragmentManager) getLastCustomNonConfigurationInstance();
+//        }
 
         setContentView(R.layout.activity_select_destination);
     }
 
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putInt("destinations_root_request_id", mDestinationsRootRequestId);
+//        outState.putInt("destinations_tree_request_id", mDestinationsTreeRequestId);
+//        outState.putParcelable("destinations_tree", mDestinationsTree);
+//    }
+//
+//    @Override
+//    public Object onRetainCustomNonConfigurationInstance() {
+//        return mTreeFragmentManager;
+//    }
 
     @Override
     protected void onResume() {
@@ -65,59 +80,6 @@ public class SelectDestinationActivity extends BeActiveActivity implements OnSel
         if (mDestinationsTreeRequestId != -1 && !getNetworkServiceHelper().isPending(mDestinationsTreeRequestId)) {
             dismissLoadingDialog();
         }
-    }
-
-    private void runPrepareDestinationsRootTask(String destinationsRootJson) {
-        new AsyncTask<String, Void, List<DestinationRootItem>>() {
-            @Override
-            protected List<DestinationRootItem> doInBackground(String... params) {
-                try {
-                    return ResponseParser.parseDestinationsRootFromJson(params[0]);
-                } catch (JSONException e) {
-                    // TODO Translate message
-                    Toast.makeText(getApplicationContext(), "Destinations root parse error.", Toast.LENGTH_LONG);
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(List<DestinationRootItem> destinationRootItems) {
-                // FIXME This is implementation for testing
-                int testRootId = destinationRootItems.get(0).getId();
-
-                SharedPreferences.Editor editor = mPrefs.edit();
-                editor.putInt(PrefUtils.KEY_ROOT_ID, testRootId);
-                editor.commit();
-
-                // Download destinations tree
-                LoadingDialogFragment loading = new LoadingDialogFragment();
-                loading.show(getSupportFragmentManager(), LoadingDialogFragment.class.getSimpleName());
-                mDestinationsTreeRequestId = getNetworkServiceHelper().getDestinationsTree(testRootId);
-            }
-        }.execute(destinationsRootJson);
-    }
-
-    private void runPrepareDestinationsTreeTask(String destinationsTreeJson) {
-        new AsyncTask<String, Void, DestinationsTree>() {
-            @Override
-            protected DestinationsTree doInBackground(String... params) {
-                try {
-                    return ResponseParser.parseDestinationsTreeFromJson(params[0]);
-                } catch (JSONException e) {
-                    // TODO Translate message
-                    Toast.makeText(getApplicationContext(), "Destinations tree parse error.", Toast.LENGTH_LONG);
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(DestinationsTree tree) {
-                mDestinationsTree = tree;
-                mTreeFragmentManager = new TreeFragmentManager(getSupportFragmentManager(),
-                        R.id.select_frame, mDestinationsTree, SelectDestinationActivity.this);
-                mTreeFragmentManager.startSelection();
-            }
-        }.execute(destinationsTreeJson);
     }
 
     @Override
@@ -157,26 +119,52 @@ public class SelectDestinationActivity extends BeActiveActivity implements OnSel
         if (getNetworkServiceHelper().checkCommandClass(requestIntent, GetDestinationsRootCommand.class)) {
             if (resultCode == GetDestinationsRootCommand.RESPONSE_SUCCESS) {
                 dismissLoadingDialog();
-                runPrepareDestinationsRootTask(data.getString("json"));
+
+                ArrayList<DestinationRootItem> root = data.getParcelableArrayList("destinations_root");
+                if (root != null) {
+                    // FIXME This is implementation for testing
+                    int testRootId = root.get(0).getId();
+
+                    SharedPreferences.Editor editor = mPrefs.edit();
+                    editor.putInt(PrefUtils.KEY_ROOT_ID, testRootId);
+                    editor.commit();
+
+                    // Download destinations tree
+                    LoadingDialogFragment loading = new LoadingDialogFragment();
+                    loading.show(getSupportFragmentManager(), LoadingDialogFragment.class.getSimpleName());
+                    mDestinationsTreeRequestId = getNetworkServiceHelper().getDestinationsTree(testRootId);
+                } else {
+                    // FIXME Fix message
+                    Toast.makeText(getApplicationContext(), "Can't load destinations root.", Toast.LENGTH_LONG).show();
+                }
             } else if (resultCode == GetDestinationsRootCommand.RESPONSE_PROGRESS) {
                 // TODO For the future
             } else if (resultCode == GetDestinationsRootCommand.RESPONSE_FAILURE) {
+                dismissLoadingDialog();
                 // FIXME Fix message
                 Toast.makeText(getApplicationContext(), "Can't load destinations root.", Toast.LENGTH_LONG).show();
-                dismissLoadingDialog();
             }
         }
 
         if (getNetworkServiceHelper().checkCommandClass(requestIntent, GetDestinationsTreeCommand.class)) {
             if (resultCode == GetDestinationsTreeCommand.RESPONSE_SUCCESS) {
                 dismissLoadingDialog();
-                runPrepareDestinationsTreeTask(data.getString("json"));
+
+                mDestinationsTree = data.getParcelable("destinations_tree");
+                if (mDestinationsTree != null) {
+                    mTreeFragmentManager = new TreeFragmentManager(getSupportFragmentManager(),
+                            R.id.select_frame, mDestinationsTree, SelectDestinationActivity.this);
+                    mTreeFragmentManager.startSelection();
+                } else {
+                    // FIXME Fix message
+                    Toast.makeText(getApplicationContext(), "Can't load destinations tree.", Toast.LENGTH_LONG).show();
+                }
             } else if (resultCode == GetDestinationsTreeCommand.RESPONSE_PROGRESS) {
                 // TODO For the future
             } else if (resultCode == GetDestinationsTreeCommand.RESPONSE_FAILURE) {
+                dismissLoadingDialog();
                 // FIXME Fix message
                 Toast.makeText(getApplicationContext(), "Can't load destinations tree.", Toast.LENGTH_LONG).show();
-                dismissLoadingDialog();
             }
         }
     }
