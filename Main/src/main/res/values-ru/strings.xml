@@ -7,9 +7,10 @@
     <string name="settings">Настройки</string>
     <string name="search">Поиск</string>
     <string name="add_to_schedule">Добавить в расписание</string>
-    <string name="more">ЕЩЁ</string>
     <string name="loading">Загрузка данных...</string>
     <string name="clear_cache">Очистить кэш</string>
+    <string name="no_coming_events">Нет ближайших событий</string>
+    <string name="no_popular_events">Нет популярных событий</string>
 
     <string-array name="weekdays">
         <item>Понедельник</item>

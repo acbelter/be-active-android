@@ -34,34 +34,14 @@ public class SelectDestinationActivity extends BeActiveActivity implements OnSel
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-//        if (savedInstanceState == null) {
-            SharedPreferences.Editor editor = mPrefs.edit();
-            editor.remove(PrefUtils.KEY_ROOT_ID);
-            editor.remove(PrefUtils.KEY_DESTINATIONS_PATH);
-            editor.remove(PrefUtils.KEY_SCHEDULE);
-            editor.commit();
-//        } else {
-//            mDestinationsRootRequestId = savedInstanceState.getInt("destinations_root_request_id", -1);
-//            mDestinationsTreeRequestId = savedInstanceState.getInt("destinations_tree_request_id", -1);
-//            mDestinationsTree = savedInstanceState.getParcelable("destinations_tree");
-//            mTreeFragmentManager = (TreeFragmentManager) getLastCustomNonConfigurationInstance();
-//        }
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.remove(PrefUtils.KEY_ROOT_ID);
+        editor.remove(PrefUtils.KEY_DESTINATIONS_PATH);
+        editor.remove(PrefUtils.KEY_SCHEDULE);
+        editor.commit();
 
         setContentView(R.layout.activity_select_destination);
     }
-
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putInt("destinations_root_request_id", mDestinationsRootRequestId);
-//        outState.putInt("destinations_tree_request_id", mDestinationsTreeRequestId);
-//        outState.putParcelable("destinations_tree", mDestinationsTree);
-//    }
-//
-//    @Override
-//    public Object onRetainCustomNonConfigurationInstance() {
-//        return mTreeFragmentManager;
-//    }
 
     @Override
     protected void onResume() {

@@ -25,16 +25,18 @@ public class TextListAdapter extends ArrayAdapter<DestinationItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_text_list, null);
 
-            ViewHolder holder = new ViewHolder();
+            holder = new ViewHolder();
             holder.title = (TextView) convertView.findViewById(R.id.title);
             convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
         DestinationItem item = getItem(position);
-        ViewHolder holder = (ViewHolder) convertView.getTag();
         holder.title.setText(item.getTitle());
 
         return convertView;

@@ -1,17 +1,12 @@
 package com.beactive.newevent;
 
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.beactive.R;
+import com.devspark.progressfragment.ProgressListFragment;
 
-public class PopularEventsFragment extends ListFragment {
-    private Button mMoreButton;
-
+// TODO Use custom ProgressFragment
+public class PopularEventsFragment extends ProgressListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,11 +14,9 @@ public class PopularEventsFragment extends ListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_popular_events, container, false);
-        mMoreButton = (Button) view.findViewById(R.id.more_button);
-        // FIXME For testing
-        mMoreButton.setEnabled(false);
-        return view;
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setEmptyText(R.string.no_popular_events);
+        setListShown(false);
     }
 }

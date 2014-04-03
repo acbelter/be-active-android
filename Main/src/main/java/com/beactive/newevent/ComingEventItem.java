@@ -1,6 +1,5 @@
 package com.beactive.newevent;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,7 +7,7 @@ import com.beactive.core.BaseItem;
 import com.beactive.util.DateTimeUtils;
 
 public class ComingEventItem extends BaseItem {
-    protected Bitmap mEventImage;
+    protected String mImageLink;
 
     public ComingEventItem(long eventId, long startTime, long endTime) {
         super(eventId, startTime, endTime);
@@ -16,7 +15,15 @@ public class ComingEventItem extends BaseItem {
 
     private ComingEventItem(Parcel in) {
         super(in);
-        mEventImage = in.readParcelable(Bitmap.class.getClassLoader());
+        mImageLink = in.readString();
+    }
+
+    public String getImageLink() {
+        return mImageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        mImageLink = imageLink;
     }
 
     @Override
@@ -27,7 +34,7 @@ public class ComingEventItem extends BaseItem {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
-        out.writeParcelable(mEventImage, flags);
+        out.writeString(mImageLink);
     }
 
     public static final Parcelable.Creator<ComingEventItem> CREATOR =
@@ -47,9 +54,5 @@ public class ComingEventItem extends BaseItem {
         // TODO Check that start date equals end date
         return DateTimeUtils.parseDate(mStartTime) + "   " +
                DateTimeUtils.parseTime(mStartTime) + "-" + DateTimeUtils.parseTime(mEndTime);
-    }
-
-    public Bitmap getEventImage() {
-        return mEventImage;
     }
 }

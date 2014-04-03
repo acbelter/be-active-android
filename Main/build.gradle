@@ -19,9 +19,10 @@ android {
 }
 
 dependencies {
-    //compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:19.0.+'
     compile 'com.android.support:appcompat-v7:19.0.+'
+    compile 'com.github.johnkil.android-progressfragment:progressfragment:1.4.0'
     //compile 'com.commonsware.cwac:endless:1.2.3'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     //compile 'com.github.gabrielemariotti.cards:library:1.4.2'

@@ -1,7 +1,8 @@
 {
-    "events": [
+    "popular_events": [
         {
             "id": 123419,
+            "image": "",
             "start": 1393952400000,
             "end": 1393957800000,
             "place": "430 ГК",
@@ -11,6 +12,7 @@
         },
         {
             "id": 123420,
+            "image": "https://dl.dropboxusercontent.com/u/82949284/test_event.png",
             "start": 1396193400000,
             "end": 1396195200000,
             "place": "Концертный зал",

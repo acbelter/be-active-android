@@ -1,13 +1,12 @@
 package com.beactive.newevent;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.beactive.core.BaseItem;
 
 public class PopularEventItem extends BaseItem {
-    protected Bitmap mEventImage;
+    protected String mImageLink;
 
     public PopularEventItem(long eventId, long startTime, long endTime) {
         super(eventId, startTime, endTime);
@@ -15,7 +14,15 @@ public class PopularEventItem extends BaseItem {
 
     private PopularEventItem(Parcel in) {
         super(in);
-        mEventImage = in.readParcelable(Bitmap.class.getClassLoader());
+        mImageLink = in.readString();
+    }
+
+    public String getImageLink() {
+        return mImageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        mImageLink = imageLink;
     }
 
     @Override
@@ -26,7 +33,7 @@ public class PopularEventItem extends BaseItem {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
-        out.writeParcelable(mEventImage, flags);
+        out.writeString(mImageLink);
     }
 
     public static final Parcelable.Creator<PopularEventItem> CREATOR =
@@ -41,12 +48,4 @@ public class PopularEventItem extends BaseItem {
                     return new PopularEventItem[size];
                 }
             };
-
-    public boolean hasEventImage() {
-        return mEventImage == null;
-    }
-
-    public Bitmap getEventImage() {
-        return mEventImage;
-    }
 }

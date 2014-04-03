@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.beactive.R;
 
 public class NewEventPagerAdapter extends FragmentPagerAdapter {
+    public static final int PAGE_COMING_EVENTS = 0;
+    public static final int PAGE_POPULAR_EVENTS = 1;
     private String[] mTitles;
 
     public NewEventPagerAdapter(Resources res, FragmentManager fragmentManager) {
@@ -28,10 +30,10 @@ public class NewEventPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0: {
-                return ComingEventsFragment.newInstance();
+            case PAGE_COMING_EVENTS: {
+                return new ComingEventsFragment();
             }
-            case 1: {
+            case PAGE_POPULAR_EVENTS: {
                 return new PopularEventsFragment();
             }
             default: {

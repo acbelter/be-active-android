@@ -27,18 +27,20 @@ public class EventsAdapter extends ArrayAdapter<EventItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_event, null);
 
-            ViewHolder holder = new ViewHolder();
+            holder = new ViewHolder();
             holder.startTime = (TextView) convertView.findViewById(R.id.start_time);
             holder.endTime = (TextView) convertView.findViewById(R.id.end_time);
             holder.title = (TextView) convertView.findViewById(R.id.title);
             convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
         EventItem item = getItem(position);
-        ViewHolder holder = (ViewHolder) convertView.getTag();
         holder.startTime.setText(item.getStartTimeString());
         holder.endTime.setText(item.getEndTimeString());
         holder.title.setText(item.getTitle());

@@ -63,13 +63,12 @@ public class ResponseParser {
         return events;
     }
 
-    // FIXME This testing implementation doesn't parse image links
     public static ArrayList<ComingEventItem> parseComingEventsFromJson(String jsonStr) throws JSONException {
         if (jsonStr == null) {
             return new ArrayList<ComingEventItem>(0);
         }
 
-        JSONArray jsonData = new JSONObject(jsonStr).getJSONArray("events");
+        JSONArray jsonData = new JSONObject(jsonStr).getJSONArray("coming_events");
         ArrayList<ComingEventItem> events = new ArrayList<ComingEventItem>(jsonData.length());
         for (int i = 0; i < jsonData.length(); i++) {
             long id = jsonData.getJSONObject(i).getLong("id");
@@ -77,6 +76,7 @@ public class ResponseParser {
             long endTime = jsonData.getJSONObject(i).getLong("end");
 
             ComingEventItem event = new ComingEventItem(id, startTime, endTime);
+            event.setImageLink(jsonData.getJSONObject(i).getString("image"));
             event.setPlace(jsonData.getJSONObject(i).getString("place"));
             event.setTitle(jsonData.getJSONObject(i).getString("title"));
             event.setOwner(jsonData.getJSONObject(i).getString("owner"));
@@ -87,13 +87,12 @@ public class ResponseParser {
         return events;
     }
 
-    // FIXME This testing implementation doesn't parse image links
     public static ArrayList<PopularEventItem> parsePopularEventsFromJson(String jsonStr) throws JSONException {
         if (jsonStr == null) {
             return new ArrayList<PopularEventItem>(0);
         }
 
-        JSONArray jsonData = new JSONObject(jsonStr).getJSONArray("events");
+        JSONArray jsonData = new JSONObject(jsonStr).getJSONArray("popular_events");
         ArrayList<PopularEventItem> events = new ArrayList<PopularEventItem>(jsonData.length());
         for (int i = 0; i < jsonData.length(); i++) {
             long id = jsonData.getJSONObject(i).getLong("id");
@@ -101,6 +100,7 @@ public class ResponseParser {
             long endTime = jsonData.getJSONObject(i).getLong("end");
 
             PopularEventItem event = new PopularEventItem(id, startTime, endTime);
+            event.setImageLink(jsonData.getJSONObject(i).getString("image"));
             event.setPlace(jsonData.getJSONObject(i).getString("place"));
             event.setTitle(jsonData.getJSONObject(i).getString("title"));
             event.setOwner(jsonData.getJSONObject(i).getString("owner"));

@@ -25,16 +25,18 @@ public class ImageGridAdapter extends ArrayAdapter<DestinationItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_image_grid, null);
 
-            ViewHolder holder = new ViewHolder();
+            holder = new ViewHolder();
             holder.gridImage = (ImageView) convertView.findViewById(R.id.image_grid);
             convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
         DestinationItem item = getItem(position);
-        ViewHolder holder = (ViewHolder) convertView.getTag();
         if (item.getImage() != null) {
             holder.gridImage.setImageBitmap(item.getImage());
         }

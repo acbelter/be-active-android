@@ -19,10 +19,11 @@
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:orientation="vertical"
         android:padding="8dp">
 
         <TextView
@@ -37,7 +38,6 @@
             android:id="@+id/owner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title"
             android:textSize="12sp"
             android:layout_marginBottom="2dp"
             tools:text="Einstein A."/>
@@ -45,9 +45,10 @@
         <TextView
             android:id="@+id/datetime_description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/owner"
-            android:textSize="12sp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textSize="14sp"
+            android:textStyle="bold"
             android:layout_marginBottom="2dp"
             tools:text="March 5th, 18:30-19:50"/>
 
@@ -55,12 +56,13 @@
             android:id="@+id/add_event_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/datetime_description"
-            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
             android:clickable="true"
             android:textSize="14sp"
             android:text="@string/add_to_schedule"
             android:textColor="@color/holo_blue_light"
-            android:layout_marginBottom="2dp"/>
-    </RelativeLayout>
+            android:layout_marginBottom="2dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
+    </LinearLayout>
 </LinearLayout>
