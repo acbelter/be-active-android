@@ -3,11 +3,11 @@ package com.beactive.core;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
-import com.beactive.network.NetworkServiceCallbackListener;
-import com.beactive.network.NetworkServiceHelper;
+import com.acbelter.nslib.NetworkServiceCallbackListener;
+import com.beactive.network.BeActiveNetworkServiceHelper;
 
 public abstract class BeActiveActivity extends ActionBarActivity implements NetworkServiceCallbackListener {
-    private NetworkServiceHelper mServiceHelper;
+    private BeActiveNetworkServiceHelper mServiceHelper;
 
     protected BeActiveApplication getApp() {
         return (BeActiveApplication) getApplication();
@@ -16,7 +16,7 @@ public abstract class BeActiveActivity extends ActionBarActivity implements Netw
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mServiceHelper = getApp().getNetworkServiceHelper();
+        mServiceHelper = new BeActiveNetworkServiceHelper(getApp().getNetworkServiceHelper());
     }
 
     @Override
@@ -31,7 +31,7 @@ public abstract class BeActiveActivity extends ActionBarActivity implements Netw
         mServiceHelper.removeListener(this);
     }
 
-    public NetworkServiceHelper getNetworkServiceHelper() {
+    public BeActiveNetworkServiceHelper getNetworkServiceHelper() {
         return mServiceHelper;
     }
 }

@@ -28,4 +28,5 @@ dependencies {
     //compile 'com.github.gabrielemariotti.cards:library:1.4.2'
     compile project(':TwoWayView')
     compile project(':AndroidSlidingUpPanel')
+    compile project(':nslib')
 }

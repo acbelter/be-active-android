@@ -14,7 +14,7 @@
         android:allowBackup="true">
 
         <service
-            android:name=".network.NetworkService"
+            android:name="com.acbelter.nslib.NetworkService"
             android:exported="false"/>
 
         <activity

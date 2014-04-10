@@ -1,28 +1,21 @@
 package com.beactive.core;
 
-import android.app.Application;
-import android.content.Context;
-
+import com.acbelter.nslib.NetworkApplication;
 import com.beactive.R;
-import com.beactive.network.NetworkServiceHelper;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-public class BeActiveApplication extends Application {
-    public static final String PACKAGE = "com.beactive";
-
-    private NetworkServiceHelper mServiceHelper;
-
+public class BeActiveApplication extends NetworkApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        mServiceHelper = new NetworkServiceHelper(this);
 
         DisplayImageOptions options = new DisplayImageOptions.Builder()
 //                .showImageOnLoading(R.drawable.default_event_icon)
                 .showImageForEmptyUri(R.drawable.default_event_icon)
+//                .imageDownloader(new BaseImageDownloader(5 * 1000, 30 * 1000)) // connectTimeout (5 s), readTimeout (30 s)
                 .resetViewBeforeLoading(true)
                 .cacheInMemory(true)
                 .cacheOnDisc(true)
@@ -35,16 +28,5 @@ public class BeActiveApplication extends Application {
                 .build();
 
         ImageLoader.getInstance().init(config);
-    }
-
-    public NetworkServiceHelper getNetworkServiceHelper() {
-        return mServiceHelper;
-    }
-
-    public static BeActiveApplication getApplication(Context context) {
-        if (context instanceof BeActiveApplication) {
-            return (BeActiveApplication) context;
-        }
-        return (BeActiveApplication) context.getApplicationContext();
     }
 }

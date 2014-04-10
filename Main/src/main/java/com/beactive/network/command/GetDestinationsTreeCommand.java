@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import android.os.ResultReceiver;
 import android.util.Log;
 
+import com.acbelter.nslib.command.BaseNetworkServiceCommand;
 import com.beactive.R;
 import com.beactive.network.ResponseParser;
 import com.beactive.util.Utils;
@@ -15,6 +16,7 @@ import com.beactive.util.Utils;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class GetDestinationsTreeCommand extends BaseNetworkServiceCommand {
     private static final String TAG = "beActive-network";
@@ -33,7 +35,11 @@ public class GetDestinationsTreeCommand extends BaseNetworkServiceCommand {
         // Download destinations tree from server in JSON format
         // FIXME Testing implementation
         try {
-            networkSimulation();
+            try {
+                TimeUnit.SECONDS.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             String json = Utils.readToString(context.getResources().openRawResource(R.raw.destinations));
 
             if (json != null) {

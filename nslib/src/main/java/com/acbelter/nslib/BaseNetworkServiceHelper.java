@@ -1,4 +1,20 @@
-package com.beactive.network;
+/*
+ * Copyright (C) 2013 Alexander Osmanov (http://perfectear.educkapps.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.acbelter.nslib;
 
 import android.app.Application;
 import android.content.Intent;
@@ -8,83 +24,35 @@ import android.os.Parcelable;
 import android.os.ResultReceiver;
 import android.util.SparseArray;
 
-import com.beactive.network.command.BaseNetworkServiceCommand;
-import com.beactive.network.command.GetComingEventsCommand;
-import com.beactive.network.command.GetDestinationsRootCommand;
-import com.beactive.network.command.GetDestinationsTreeCommand;
-import com.beactive.network.command.GetEventsCommand;
-import com.beactive.network.command.GetPopularEventsCommand;
-import com.beactive.network.command.GetScheduleCommand;
+import com.acbelter.nslib.command.BaseNetworkServiceCommand;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class NetworkServiceHelper {
-    private List<NetworkServiceCallbackListener> mCallbacks;
+public class BaseNetworkServiceHelper implements NetworkServiceHelper {
+    private ArrayList<NetworkServiceCallbackListener> mCallbacks;
     private AtomicInteger mRequestCounter;
     private SparseArray<Intent> mPendingRequests;
     private Application mApplication;
 
-    public NetworkServiceHelper(Application application) {
+    public BaseNetworkServiceHelper(Application application) {
         mApplication = application;
         mCallbacks = new ArrayList<NetworkServiceCallbackListener>();
         mRequestCounter = new AtomicInteger();
         mPendingRequests = new SparseArray<Intent>();
     }
 
-
-    public int getDestinationsRoot() {
-        final int requestId = createCommandId();
-
-        Intent requestIntent = buildRequestIntent(new GetDestinationsRootCommand(), requestId);
-        return executeRequest(requestId, requestIntent);
-    }
-
-    public int getDestinationsTree(int rootId) {
-        final int requestId = createCommandId();
-
-        Intent requestIntent = buildRequestIntent(new GetDestinationsTreeCommand(rootId), requestId);
-        return executeRequest(requestId, requestIntent);
-    }
-
-    public int getSchedule(int rootId, String destinationsPath) {
-        final int requestId = createCommandId();
-
-        Intent requestIntent = buildRequestIntent(new GetScheduleCommand(rootId, destinationsPath), requestId);
-        return executeRequest(requestId, requestIntent);
-    }
-
-    public int getEvents(int rootId) {
-        final int requestId = createCommandId();
-
-        Intent requestIntent = buildRequestIntent(new GetEventsCommand(rootId), requestId);
-        return executeRequest(requestId, requestIntent);
-    }
-
-    public int getComingEvents(int rootId) {
-        final int requestId = createCommandId();
-
-        Intent requestIntent = buildRequestIntent(new GetComingEventsCommand(rootId), requestId);
-        return executeRequest(requestId, requestIntent);
-    }
-
-    public int getPopularEvents(int rootId) {
-        final int requestId = createCommandId();
-
-        Intent requestIntent = buildRequestIntent(new GetPopularEventsCommand(rootId), requestId);
-        return executeRequest(requestId, requestIntent);
-    }
-
-
+    @Override
     public void addListener(NetworkServiceCallbackListener callback) {
         mCallbacks.add(callback);
     }
 
+    @Override
     public void removeListener(NetworkServiceCallbackListener callback) {
         mCallbacks.remove(callback);
     }
 
+    @Override
     public void cancelRequest(int requestId) {
         Intent cancelIntent = new Intent(mApplication, NetworkService.class);
         cancelIntent.setAction(NetworkService.ACTION_CANCEL_COMMAND);
@@ -94,27 +62,29 @@ public class NetworkServiceHelper {
         mPendingRequests.remove(requestId);
     }
 
+    @Override
     public boolean checkCommandClass(Intent requestIntent,
                                      Class<? extends BaseNetworkServiceCommand> commandClass) {
         Parcelable commandExtra = requestIntent.getParcelableExtra(NetworkService.EXTRA_COMMAND);
         return commandExtra != null && commandExtra.getClass().equals(commandClass);
     }
 
+    public int createCommandId() {
+        return mRequestCounter.getAndIncrement();
+    }
+
+    @Override
     public boolean isPending(int requestId) {
         return mPendingRequests.get(requestId) != null;
     }
 
-    private int createCommandId() {
-        return mRequestCounter.getAndIncrement();
-    }
-
-    private int executeRequest(int requestId, Intent requestIntent) {
+    public int executeRequest(int requestId, Intent requestIntent) {
         mPendingRequests.append(requestId, requestIntent);
         mApplication.startService(requestIntent);
         return requestId;
     }
 
-    private Intent buildRequestIntent(BaseNetworkServiceCommand command, final int requestId) {
+    public Intent buildRequestIntent(BaseNetworkServiceCommand command, final int requestId) {
         Intent requestIntent = new Intent(mApplication, NetworkService.class);
         requestIntent.setAction(NetworkService.ACTION_EXECUTE_COMMAND);
 
