@@ -155,6 +155,7 @@ public class SelectDestinationActivity extends BeActiveActivity implements OnSel
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             ProgressDialog progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage(getString(R.string.loading));
+            progressDialog.setCancelable(false);
             return progressDialog;
         }
     }

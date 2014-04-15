@@ -38,6 +38,7 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
         mGridView.setOnItemClickListener(this);
 
         TextView title = (TextView) view.findViewById(R.id.title);
+        // FIXME NullPointerException??
         title.setText(mLevel.title);
 
         return view;

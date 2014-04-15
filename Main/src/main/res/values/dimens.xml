@@ -5,4 +5,7 @@
     <dimen name="shadow_width">4dp</dimen>
     <dimen name="grid_image_size">100dp</dimen>
     <dimen name="new_event_image_preview_size">60dp</dimen>
+    <!-- TODO Use different values -->
+    <dimen name="edit_text_width">260dp</dimen>
+    <dimen name="item_border_radius">1dp</dimen>
 </resources>

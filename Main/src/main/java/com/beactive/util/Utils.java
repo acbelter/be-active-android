@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
     private static final String TAG = "beActive";
@@ -34,5 +36,21 @@ public class Utils {
         }
 
         return builder.toString();
+    }
+
+    public static boolean checkEmail(String email) {
+        /* It's assumed that the email is correct if it matches with regexp.
+         * The regexp description:
+         * www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression
+         * Using this regexp gives more accurate results than using Patterns.EMAIL_ADDRESS.
+         */
+        final String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        Pattern pattern = Pattern.compile(emailPattern);
+        Matcher matcher = pattern.matcher(email);
+        if (email.length() > 0 && !matcher.matches()) {
+            return false;
+        }
+        return true;
     }
 }

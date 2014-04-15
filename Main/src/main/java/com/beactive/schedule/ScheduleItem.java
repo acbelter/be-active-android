@@ -36,11 +36,11 @@ public class ScheduleItem extends BaseItem implements IScheduleItem {
 
     @Override
     public int getViewHeight() {
-        float durationFactor = (float) (mEndTime - mStartTime) / MIN_DURATION;
+        float durationFactor = (float) (mEndTime - mStartTime) / ScheduleConstants.MIN_DURATION;
         if (durationFactor < 1) {
-            return MIN_HEIGHT;
+            return ScheduleConstants.MIN_HEIGHT;
         } else {
-            return (int) (durationFactor * MIN_HEIGHT);
+            return (int) (durationFactor * ScheduleConstants.MIN_HEIGHT);
         }
     }
 
@@ -90,13 +90,13 @@ public class ScheduleItem extends BaseItem implements IScheduleItem {
     private int getTimeLayoutColor(ItemType type) {
         switch (type) {
             case LECTURE: {
-                return COLOR_LECTURE;
+                return ScheduleConstants.COLOR_LECTURE;
             }
             case SEMINAR: {
-                return COLOR_SEMINAR;
+                return ScheduleConstants.COLOR_SEMINAR;
             }
             case LAB: {
-                return COLOR_YELLOW;
+                return ScheduleConstants.COLOR_YELLOW;
             }
             default: {
                 return Color.TRANSPARENT;

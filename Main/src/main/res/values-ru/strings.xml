@@ -11,6 +11,11 @@
     <string name="clear_cache">Очистить кэш</string>
     <string name="no_coming_events">Нет ближайших событий</string>
     <string name="no_popular_events">Нет популярных событий</string>
+    <string name="hint_full_name">Полное имя</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Пароль</string>
+    <string name="sign_in">Войти</string>
+    <string name="register">Зарегистрироваться</string>
 
     <string-array name="weekdays">
         <item>Понедельник</item>

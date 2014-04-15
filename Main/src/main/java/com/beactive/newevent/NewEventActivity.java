@@ -62,7 +62,7 @@ public class NewEventActivity extends BeActiveActivity implements SearchView.OnQ
         tabs.setViewPager(mPager);
 
         if (savedInstanceState == null) {
-
+            // FIXME
         } else {
             mComingEventsRequestId = savedInstanceState.getInt("coming_events_request_id");
             mPopularEventsRequestId = savedInstanceState.getInt("popular_events_request_id");
