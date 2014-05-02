@@ -16,6 +16,7 @@
     <string name="hint_password">Пароль</string>
     <string name="sign_in">Войти</string>
     <string name="register">Зарегистрироваться</string>
+    <string name="delete">Удалить</string>
 
     <string-array name="weekdays">
         <item>Понедельник</item>

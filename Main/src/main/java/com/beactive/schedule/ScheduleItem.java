@@ -12,9 +12,9 @@ import com.beactive.R;
 import com.beactive.core.BaseItem;
 import com.beactive.core.ItemType;
 
-public class ScheduleItem extends BaseItem implements IScheduleItem {
-    public ScheduleItem(long eventId, long startTime, long endTime) {
-        super(eventId, startTime, endTime);
+public class ScheduleItem extends BaseItem {
+    public ScheduleItem(long id, long startTime, long endTime) {
+        super(id, startTime, endTime);
     }
 
     private ScheduleItem(Parcel in) {
@@ -33,21 +33,6 @@ public class ScheduleItem extends BaseItem implements IScheduleItem {
                     return new ScheduleItem[size];
                 }
             };
-
-    @Override
-    public int getViewHeight() {
-        float durationFactor = (float) (mEndTime - mStartTime) / ScheduleConstants.MIN_DURATION;
-        if (durationFactor < 1) {
-            return ScheduleConstants.MIN_HEIGHT;
-        } else {
-            return (int) (durationFactor * ScheduleConstants.MIN_HEIGHT);
-        }
-    }
-
-    @Override
-    public int getViewType() {
-        return ITEM_TYPE_GENERAL;
-    }
 
     static class ViewHolder {
         RelativeLayout timeLayout;
@@ -81,9 +66,6 @@ public class ScheduleItem extends BaseItem implements IScheduleItem {
         holder.place.setText(mPlace);
         holder.owner.setText(mOwner);
 
-        // FIXME Height of title TextView can be more than the minimal height of item...
-        convertView.setMinimumHeight(getViewHeight());
-
         return convertView;
     }
 
@@ -99,7 +81,7 @@ public class ScheduleItem extends BaseItem implements IScheduleItem {
                 return ScheduleConstants.COLOR_YELLOW;
             }
             default: {
-                return Color.TRANSPARENT;
+                return Color.WHITE;
             }
         }
     }

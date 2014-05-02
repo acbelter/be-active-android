@@ -21,7 +21,7 @@
         android:inputType="textCapWords"
         android:maxLines="1"
         android:imeOptions="actionNext"
-        android:background="@drawable/border_background"/>
+        android:background="@drawable/bg_bordered"/>
 
     <EditText
         android:id="@+id/email"
@@ -32,7 +32,7 @@
         android:hint="@string/hint_email"
         android:maxLines="1"
         android:imeOptions="actionNext"
-        android:background="@drawable/border_background"
+        android:background="@drawable/bg_bordered"
         android:inputType="textEmailAddress"/>
 
     <EditText
@@ -44,7 +44,7 @@
         android:hint="@string/hint_password"
         android:maxLines="1"
         android:imeOptions="actionNext"
-        android:background="@drawable/border_background"
+        android:background="@drawable/bg_bordered"
         android:inputType="textPassword"/>
 
     <Button

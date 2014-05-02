@@ -1,5 +1,6 @@
 package com.beactive.network;
 
+import com.beactive.core.BaseItem;
 import com.beactive.core.ItemType;
 import com.beactive.destination.DestinationItem;
 import com.beactive.destination.DestinationRootItem;
@@ -7,7 +8,6 @@ import com.beactive.destination.DestinationsTree;
 import com.beactive.newevent.ComingEventItem;
 import com.beactive.newevent.PopularEventItem;
 import com.beactive.schedule.EventItem;
-import com.beactive.schedule.IScheduleItem;
 import com.beactive.schedule.ScheduleItem;
 
 import org.json.JSONArray;
@@ -17,13 +17,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class ResponseParser {
-    public static ArrayList<IScheduleItem> parseScheduleFromJson(String jsonStr) throws JSONException {
+    public static ArrayList<BaseItem> parseScheduleFromJson(String jsonStr) throws JSONException {
         if (jsonStr == null) {
-            return new ArrayList<IScheduleItem>(0);
+            return new ArrayList<BaseItem>(0);
         }
 
         JSONArray jsonData = new JSONObject(jsonStr).getJSONArray("schedule");
-        ArrayList<IScheduleItem> schedule = new ArrayList<IScheduleItem>(jsonData.length());
+        ArrayList<BaseItem> schedule = new ArrayList<BaseItem>(jsonData.length());
         for (int i = 0; i < jsonData.length(); i++) {
             long id = jsonData.getJSONObject(i).getLong("id");
             long startTime = jsonData.getJSONObject(i).getLong("start");

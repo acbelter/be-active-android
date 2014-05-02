@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.beactive.R;
+import com.beactive.core.BaseItem;
 import com.beactive.core.BeActiveActivity;
 import com.beactive.destination.SelectDestinationActivity;
 import com.beactive.network.ResponseParser;
@@ -79,7 +80,7 @@ public class ScheduleActivity extends BeActiveActivity {
                 String scheduleJson = mPrefs.getString(PrefUtils.KEY_SCHEDULE, null);
                 if (scheduleJson != null) {
                     try {
-                        ArrayList<IScheduleItem> schedule = ResponseParser.parseScheduleFromJson(scheduleJson);
+                        ArrayList<BaseItem> schedule = ResponseParser.parseScheduleFromJson(scheduleJson);
                         if (schedule != null) {
                             setupSchedule(new Schedule(schedule));
                         }
@@ -202,7 +203,7 @@ public class ScheduleActivity extends BeActiveActivity {
                     mPrefs.edit().putString(PrefUtils.KEY_SCHEDULE, scheduleJson).commit();
                 }
 
-                ArrayList<IScheduleItem> schedule = data.getParcelableArrayList("schedule");
+                ArrayList<BaseItem> schedule = data.getParcelableArrayList("schedule");
                 if (schedule != null) {
                     setupSchedule(new Schedule(schedule));
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <declare-styleable name="ScheduleView">
+        <attr name="item_paddingLeft" format="dimension"/>
+        <attr name="item_paddingRight" format="dimension"/>
+        <attr name="internal_paddingTop" format="dimension"/>
+        <attr name="internal_paddingBottom" format="dimension"/>
+        <attr name="timeMarksDistance" format="dimension"/>
+        <attr name="android:fadeScrollbars"/>
+        <attr name="android:scrollbarAlwaysDrawHorizontalTrack"/>
+        <attr name="android:scrollbarAlwaysDrawVerticalTrack"/>
+        <attr name="android:scrollbarDefaultDelayBeforeFade"/>
+        <attr name="android:scrollbarFadeDuration"/>
+        <attr name="android:scrollbarSize"/>
+        <attr name="android:scrollbarStyle"/>
+        <attr name="android:scrollbarThumbHorizontal"/>
+        <attr name="android:scrollbarThumbVertical"/>
+        <attr name="android:scrollbarTrackHorizontal"/>
+        <attr name="android:scrollbarTrackVertical"/>
+        <attr name="android:scrollbars"/>
+    </declare-styleable>
+</resources>
