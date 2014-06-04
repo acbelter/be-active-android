@@ -2,11 +2,11 @@ package com.beactive.core;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-
 import com.acbelter.nslib.NetworkServiceCallbackListener;
 import com.beactive.network.BeActiveNetworkServiceHelper;
 
-public abstract class BeActiveActivity extends ActionBarActivity implements NetworkServiceCallbackListener {
+public abstract class BeActiveActivity extends ActionBarActivity
+        implements NetworkServiceCallbackListener {
     private BeActiveNetworkServiceHelper mServiceHelper;
 
     protected BeActiveApplication getApp() {

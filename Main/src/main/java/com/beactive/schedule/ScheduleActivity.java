@@ -11,8 +11,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
-
+import com.acbelter.directionalcarousel.CarouselPagerAdapter;
+import com.acbelter.directionalcarousel.CarouselViewPager;
+import com.acbelter.directionalcarousel.page.OnPageClickListener;
 import com.beactive.R;
 import com.beactive.core.BaseItem;
 import com.beactive.core.BeActiveActivity;
@@ -23,28 +27,28 @@ import com.beactive.network.command.GetScheduleCommand;
 import com.beactive.newevent.NewEventActivity;
 import com.beactive.util.PrefUtils;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
 import org.json.JSONException;
-import org.lucasr.twowayview.TwoWayView;
 
 import java.util.ArrayList;
 
-public class ScheduleActivity extends BeActiveActivity {
+public class ScheduleActivity extends BeActiveActivity implements OnPageClickListener<EventItem> {
     private ViewPager mSchedulePager;
-    private TwoWayView mEventsList;
+    private CarouselViewPager mEventsPager;
 
     private SharedPreferences mPrefs;
 
     private Schedule mSchedule;
     private ArrayList<EventItem> mEvents;
     private WeekdaysPagerAdapter mPagerAdapter;
-    private EventsAdapter mEventsAdapter;
+    private CarouselPagerAdapter<EventItem> mEventsPagerAdapter;
 
     private int mScheduleRequestId = -1;
     private int mEventsRequestId = -1;
 
     private int mRootId;
     private String mDestinationsPath;
+    private SlidingUpPanelLayout mSlidingPanel;
+    private TextView mEventsPanelTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,28 +69,32 @@ public class ScheduleActivity extends BeActiveActivity {
 
         setContentView(R.layout.activity_schedule);
 
-        SlidingUpPanelLayout layout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        if (layout != null) {
-            layout.setShadowDrawable(getResources().getDrawable(R.drawable.above_shadow));
-            layout.setAnchorPoint(1.0f);
-            layout.setCoveredFadeColor(Color.TRANSPARENT);
+        mSlidingPanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        if (mSlidingPanel != null) {
+            //layout.setShadowDrawable(getResources().getDrawable(R.drawable.above_shadow));
+            mSlidingPanel.setAnchorPoint(1.0f);
+            mSlidingPanel.setCoveredFadeColor(Color.TRANSPARENT);
+            mEventsPanelTitle = (TextView) mSlidingPanel.findViewById(R.id.events_panel_title);
+            setSlidingPanelTitle();
         }
 
         mSchedulePager = (ViewPager) findViewById(R.id.schedule_pager);
-        mEventsList = (TwoWayView) findViewById(R.id.events_list);
+        mEventsPager = (CarouselViewPager) findViewById(R.id.events_carousel_pager);
 
         if (savedInstanceState == null) {
             if (mPrefs.contains(PrefUtils.KEY_SCHEDULE)) {
                 String scheduleJson = mPrefs.getString(PrefUtils.KEY_SCHEDULE, null);
                 if (scheduleJson != null) {
                     try {
-                        ArrayList<BaseItem> schedule = ResponseParser.parseScheduleFromJson(scheduleJson);
+                        ArrayList<BaseItem> schedule =
+                                ResponseParser.parseScheduleFromJson(scheduleJson);
                         if (schedule != null) {
                             setupSchedule(new Schedule(schedule));
                         }
                     } catch (JSONException e) {
                         // TODO Translate message
-                        Toast.makeText(getApplicationContext(), "Can't open schedule from preferences.", Toast.LENGTH_LONG);
+                        Toast.makeText(getApplicationContext(),
+                                "Can't open schedule from preferences.", Toast.LENGTH_LONG);
                     }
                 }
             }
@@ -110,6 +118,23 @@ public class ScheduleActivity extends BeActiveActivity {
         }
     }
 
+    private void setSlidingPanelTitle() {
+        if (mSlidingPanel == null || mEventsPanelTitle == null) {
+            return;
+        }
+        int eventsCount = mEvents == null ? 0 : mEvents.size();
+        if (eventsCount == 0) {
+            if (mSlidingPanel.isExpanded()) {
+                mSlidingPanel.collapsePane();
+            }
+            mSlidingPanel.setSlidingEnabled(false);
+        } else {
+            mSlidingPanel.setSlidingEnabled(true);
+        }
+        String newTitle = getString(R.string.events) + "(" + eventsCount + ")";
+        mEventsPanelTitle.setText(newTitle);
+    }
+
     private void setupSchedule(Schedule schedule) {
         mSchedule = schedule;
         mPagerAdapter = new WeekdaysPagerAdapter(ScheduleActivity.this,
@@ -119,8 +144,11 @@ public class ScheduleActivity extends BeActiveActivity {
 
     private void setupEvents(ArrayList<EventItem> events) {
         mEvents = events;
-        mEventsAdapter = new EventsAdapter(ScheduleActivity.this, events);
-        mEventsList.setAdapter(mEventsAdapter);
+        mEventsPagerAdapter = new CarouselPagerAdapter<EventItem>(getSupportFragmentManager(),
+                EventPageFragment.class, R.layout.item_event, events);
+        mEventsPagerAdapter.setOnPageClickListener(this);
+        mEventsPager.setAdapter(mEventsPagerAdapter);
+        setSlidingPanelTitle();
     }
 
     @Override
@@ -213,14 +241,16 @@ public class ScheduleActivity extends BeActiveActivity {
                     }
                 } else {
                     // FIXME Fix message
-                    Toast.makeText(getApplicationContext(), "Can't load schedule.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Can't load schedule.",
+                            Toast.LENGTH_LONG).show();
                 }
             } else if (resultCode == GetScheduleCommand.RESPONSE_PROGRESS) {
                 // TODO For the future
             } else if (resultCode == GetScheduleCommand.RESPONSE_FAILURE) {
                 dismissLoadingDialog();
                 // FIXME Fix message
-                Toast.makeText(getApplicationContext(), "Can't load schedule.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Can't load schedule.",
+                        Toast.LENGTH_LONG).show();
             }
         }
 
@@ -233,15 +263,27 @@ public class ScheduleActivity extends BeActiveActivity {
                     events = new ArrayList<EventItem>(0);
                     setupEvents(events);
                     // FIXME Fix message
-                    Toast.makeText(getApplicationContext(), "Can't load events.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Can't load events.",
+                            Toast.LENGTH_LONG).show();
                 }
             } else if (resultCode == GetEventsCommand.RESPONSE_PROGRESS) {
                 // TODO For the future
             } else if (resultCode == GetScheduleCommand.RESPONSE_FAILURE) {
                 // FIXME Fix message
-                Toast.makeText(getApplicationContext(), "Can't load events.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Can't load events.",
+                        Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @Override
+    public void onSingleTap(View view, EventItem item) {
+
+    }
+
+    @Override
+    public void onDoubleTap(View view, EventItem item) {
+
     }
 
     // TODO Move this class to BeActiveActivity?

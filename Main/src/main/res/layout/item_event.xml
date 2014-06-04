@@ -1,38 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="8dp"
-                android:background="@drawable/selector_event">
+<com.acbelter.directionalcarousel.page.PageLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:gravity="center">
 
-    <TextView
-        android:id="@+id/start_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="2dp"
-        android:gravity="center_horizontal"
-        android:textStyle="bold"
-        tools:text="09:00"/>
+    <com.acbelter.directionalcarousel.fglayout.ForegroundRelativeLayout
+      android:id="@+id/page_content"
+      android:layout_width="@dimen/page_content_width"
+      android:layout_height="@dimen/page_content_height"
+      android:clickable="true"
+      android:gravity="center"
+      android:background="@android:color/darker_gray"
+      android:foreground="@drawable/selector_event_item">
 
-    <TextView
-        android:id="@+id/end_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="2dp"
-        android:gravity="center_horizontal"
-        android:layout_toRightOf="@id/start_time"
-        tools:text="10:25"/>
+        <TextView
+          android:id="@+id/start_time"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="2dp"
+          android:gravity="center_horizontal"
+          android:textStyle="bold"
+          tools:text="09:00"/>
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:layout_below="@id/start_time"
-        android:textSize="16sp"
-        android:maxLines="3"
-        android:ellipsize="end"
-        tools:text="Invited lecture on Physics"/>
-</RelativeLayout>
+        <TextView
+          android:id="@+id/end_time"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="2dp"
+          android:gravity="center_horizontal"
+          android:layout_toRightOf="@id/start_time"
+          tools:text="10:25"/>
+
+        <TextView
+          android:id="@+id/title"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_below="@id/start_time"
+          android:textSize="16sp"
+          android:maxLines="3"
+          android:ellipsize="end"
+          tools:text="Invited lecture on Physics"/>
+    </com.acbelter.directionalcarousel.fglayout.ForegroundRelativeLayout>
+</com.acbelter.directionalcarousel.page.PageLayout>

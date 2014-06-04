@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:carousel="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -10,9 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        sothree:collapsedHeight="@dimen/events_sliding_view_height"
+        sothree:panelHeight="@dimen/events_sliding_view_height"
         sothree:shadowHeight="@dimen/shadow_width"
-        sothree:dragView="@+id/name">
+        sothree:dragView="@+id/events_panel_title">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/schedule_pager"
@@ -32,27 +33,32 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#eee"
             android:focusable="false">
 
             <TextView
-                android:id="@id/name"
+                android:id="@id/events_panel_title"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/events_sliding_view_height"
                 android:text="@string/events"
                 android:gravity="center"
                 android:textSize="18sp"/>
 
-            <org.lucasr.twowayview.TwoWayView
-                android:id="@+id/events_list"
-                style="@style/HorizontalTwoWayView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:drawSelectorOnTop="false"
-                android:listSelector="@android:color/transparent"/>
+            <FrameLayout
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/pager_size">
+
+                <com.acbelter.directionalcarousel.CarouselViewPager
+                  android:id="@+id/events_carousel_pager"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="horizontal"
+                  carousel:wrapPadding="@dimen/pager_wrap_padding"
+                  carousel:infinite="false"
+                  carousel:scrollScalingMode="bigCurrent"/>
+            </FrameLayout>
         </LinearLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 </RelativeLayout>

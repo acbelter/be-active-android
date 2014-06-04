@@ -4,10 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
-
+import com.acbelter.scheduleview.GeneralScheduleItem;
 import com.beactive.util.DateTimeUtils;
 
-public abstract class BaseItem implements Parcelable, Comparable<BaseItem> {
+public abstract class BaseItem extends GeneralScheduleItem implements Parcelable {
     protected long mId;
     protected long mStartTime;
     protected long mEndTime;
@@ -52,10 +52,12 @@ public abstract class BaseItem implements Parcelable, Comparable<BaseItem> {
         out.writeSerializable(mType);
     }
 
+    @Override
     public long getId() {
         return mId;
     }
 
+    @Override
     public long getStartTime() {
         return mStartTime;
     }
@@ -64,6 +66,7 @@ public abstract class BaseItem implements Parcelable, Comparable<BaseItem> {
         this.mStartTime = mStartTime;
     }
 
+    @Override
     public long getEndTime() {
         return mEndTime;
     }
@@ -110,16 +113,5 @@ public abstract class BaseItem implements Parcelable, Comparable<BaseItem> {
 
     public void setType(ItemType type) {
         mType = type;
-    }
-
-    @Override
-    public int compareTo(BaseItem another) {
-        if (mStartTime < another.mStartTime) {
-            return -1;
-        }
-        if (mStartTime > another.mStartTime) {
-            return 1;
-        }
-        return 0;
     }
 }

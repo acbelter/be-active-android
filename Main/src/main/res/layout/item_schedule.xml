@@ -1,68 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:background="@drawable/bg_schedule_item">
+<com.acbelter.scheduleview.fglayout.ForegroundLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:clickable="true"
+    android:background="@android:color/white"
+    android:foreground="@drawable/selector_schedule_item">
 
     <RelativeLayout
-        android:id="@+id/time_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:padding="8dp">
+      android:id="@+id/time_layout"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:padding="8dp">
 
         <TextView
-            android:id="@+id/start_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="09:00"/>
+          android:id="@+id/start_time"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          tools:text="09:00"/>
 
         <TextView
-            android:id="@+id/end_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/start_time"
-            tools:text="10:25"/>
+          android:id="@+id/end_time"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/start_time"
+          tools:text="10:25"/>
     </RelativeLayout>
 
     <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/darker_gray"/>
+      android:layout_width="1dp"
+      android:layout_height="match_parent"
+      android:background="@android:color/darker_gray"/>
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:padding="8dp"
-        android:orientation="vertical"
-        android:background="@android:color/white">
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      android:padding="8dp"
+      android:orientation="vertical">
 
         <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:textSize="16sp"
-            tools:text="Invited lecture on Physics"/>
+          android:id="@+id/title"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="2dp"
+          android:textSize="16sp"
+          tools:text="Invited lecture on Physics"/>
 
         <TextView
-            android:id="@+id/place"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:layout_marginBottom="2dp"
-            tools:text="Classroom 21"/>
+          android:id="@+id/place"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textSize="12sp"
+          android:layout_marginBottom="2dp"
+          tools:text="Classroom 21"/>
 
         <TextView
-            android:id="@+id/owner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:layout_marginBottom="2dp"
-            tools:text="Einstein A."/>
+          android:id="@+id/owner"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textSize="12sp"
+          android:layout_marginBottom="2dp"
+          tools:text="Einstein A."/>
     </LinearLayout>
-</LinearLayout>
+</com.acbelter.scheduleview.fglayout.ForegroundLinearLayout>

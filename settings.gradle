@@ -1,2 +1,2 @@
-include ':AndroidSlidingUpPanel', ':TwoWayView'
-include ':Main', ':nslib'
+include ':ScheduleView', ':DirectionalCarousel', ':nslib'
+include ':Main'

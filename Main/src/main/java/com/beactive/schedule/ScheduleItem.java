@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.beactive.R;
 import com.beactive.core.BaseItem;
 import com.beactive.core.ItemType;

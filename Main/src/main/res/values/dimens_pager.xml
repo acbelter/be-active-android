@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="page_content_width">190dp</dimen>
+    <dimen name="page_content_height">110dp</dimen>
+    <dimen name="pager_wrap_padding">10dp</dimen>
+    <dimen name="pager_size">130dp</dimen>
+</resources>
