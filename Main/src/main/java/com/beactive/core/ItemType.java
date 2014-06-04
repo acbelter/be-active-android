@@ -3,7 +3,7 @@ package com.beactive.core;
 public enum ItemType {
     LECTURE,
     SEMINAR,
-    LAB,
+    PRACTICE,
     TRAIN,
     INVITED_LECTURE,
     CONCERT;
@@ -17,7 +17,7 @@ public enum ItemType {
                 return SEMINAR;
             }
             case 103: {
-                return LAB;
+                return PRACTICE;
             }
             case 201: {
                 return TRAIN;

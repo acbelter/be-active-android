@@ -5,7 +5,7 @@ public class ScheduleConstants {
     static final int COLOR_LECTURE = 0xffff99cc;
     static final int COLOR_SEMINAR = 0xffccffff;
     // FIXME Change color name
-    static final int COLOR_YELLOW = 0xffffff99;
+    static final int COLOR_PRACTICE = 0xffffff99;
     static final int COLOR_LEISURE = 0xffccffcc;
 
     static final int ITEM_TYPES_COUNT = 2;

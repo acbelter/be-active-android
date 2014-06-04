@@ -1,11 +1,9 @@
 package com.beactive.schedule;
 
-import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.beactive.R;
 import com.beactive.core.BaseItem;
@@ -34,7 +32,6 @@ public class ScheduleItem extends BaseItem {
             };
 
     static class ViewHolder {
-        RelativeLayout timeLayout;
         TextView startTime;
         TextView endTime;
         TextView title;
@@ -48,7 +45,6 @@ public class ScheduleItem extends BaseItem {
             convertView = inflater.inflate(R.layout.item_schedule, null);
 
             ViewHolder holder = new ViewHolder();
-            holder.timeLayout = (RelativeLayout) convertView.findViewById(R.id.time_layout);
             holder.startTime = (TextView) convertView.findViewById(R.id.start_time);
             holder.endTime = (TextView) convertView.findViewById(R.id.end_time);
             holder.title = (TextView) convertView.findViewById(R.id.title);
@@ -58,9 +54,9 @@ public class ScheduleItem extends BaseItem {
         }
 
         ViewHolder holder = (ViewHolder) convertView.getTag();
-        holder.timeLayout.setBackgroundColor(getTimeLayoutColor(mType));
         holder.startTime.setText(getStartTimeString());
         holder.endTime.setText(getEndTimeString());
+        holder.title.setBackgroundColor(getTimeLayoutColor(mType));
         holder.title.setText(mTitle);
         holder.place.setText(mPlace);
         holder.owner.setText(mOwner);
@@ -76,11 +72,11 @@ public class ScheduleItem extends BaseItem {
             case SEMINAR: {
                 return ScheduleConstants.COLOR_SEMINAR;
             }
-            case LAB: {
-                return ScheduleConstants.COLOR_YELLOW;
+            case PRACTICE: {
+                return ScheduleConstants.COLOR_PRACTICE;
             }
             default: {
-                return Color.WHITE;
+                return ScheduleConstants.COLOR_LEISURE;
             }
         }
     }
