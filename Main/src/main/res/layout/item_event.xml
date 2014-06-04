@@ -8,41 +8,47 @@
   android:orientation="vertical"
   android:gravity="center">
 
-    <com.acbelter.directionalcarousel.fglayout.ForegroundRelativeLayout
+    <com.acbelter.directionalcarousel.fglayout.ForegroundLinearLayout
       android:id="@+id/page_content"
       android:layout_width="@dimen/page_content_width"
       android:layout_height="@dimen/page_content_height"
       android:clickable="true"
       android:gravity="center"
-      android:background="@android:color/darker_gray"
+      android:orientation="vertical"
+      android:background="@drawable/bg_event_item"
       android:foreground="@drawable/selector_event_item">
-
-        <TextView
-          android:id="@+id/start_time"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginRight="2dp"
-          android:gravity="center_horizontal"
-          android:textStyle="bold"
-          tools:text="09:00"/>
-
-        <TextView
-          android:id="@+id/end_time"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="2dp"
-          android:gravity="center_horizontal"
-          android:layout_toRightOf="@id/start_time"
-          tools:text="10:25"/>
 
         <TextView
           android:id="@+id/title"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_below="@id/start_time"
+          android:layout_height="0dp"
+          android:layout_weight="1"
+          android:padding="2dp"
           android:textSize="16sp"
           android:maxLines="3"
           android:ellipsize="end"
           tools:text="Invited lecture on Physics"/>
-    </com.acbelter.directionalcarousel.fglayout.ForegroundRelativeLayout>
+
+        <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="2dp"
+          android:background="#00b331">
+
+            <TextView
+              android:id="@+id/start_time"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textSize="22sp"
+              tools:text="09:00"/>
+
+            <TextView
+              android:id="@+id/end_time"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textSize="22sp"
+              android:layout_alignParentRight="true"
+              tools:text="10:25"/>
+          </RelativeLayout>
+    </com.acbelter.directionalcarousel.fglayout.ForegroundLinearLayout>
 </com.acbelter.directionalcarousel.page.PageLayout>

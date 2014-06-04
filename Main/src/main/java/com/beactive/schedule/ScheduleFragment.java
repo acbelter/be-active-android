@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 import com.acbelter.scheduleview.ScheduleView;
 import com.beactive.R;
@@ -12,7 +13,7 @@ import com.beactive.core.BaseItem;
 
 import java.util.ArrayList;
 
-public class ScheduleFragment extends Fragment {
+public class ScheduleFragment extends Fragment implements AdapterView.OnItemClickListener {
     private static final int TIME_ZONE_OFFSET = 3; // Moscow TimeZone
     private static final int START_HOUR = 8;
     private static final int END_HOUR = 0;
@@ -39,8 +40,7 @@ public class ScheduleFragment extends Fragment {
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
         mScheduleView.setAdapter(mScheduleAdapter);
-        // TODO
-        //mScheduleView.setOnItemClickListener();
+        mScheduleView.setOnItemClickListener(this);
     }
 
     @Override
@@ -50,5 +50,12 @@ public class ScheduleFragment extends Fragment {
         mScheduleView = (ScheduleView) view.findViewById(R.id.schedule);
         mScheduleView.configure(START_HOUR, END_HOUR, TIME_ZONE_OFFSET, true);
         return view;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(getActivity(), "Clicked: " +
+                        mScheduleAdapter.getItem(position).getTitle(),
+                Toast.LENGTH_SHORT).show();
     }
 }

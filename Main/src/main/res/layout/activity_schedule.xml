@@ -44,7 +44,8 @@
                 android:layout_height="@dimen/events_sliding_view_height"
                 android:text="@string/events"
                 android:gravity="center"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:background="#66ff3333"/>
 
             <FrameLayout
               android:layout_width="match_parent"

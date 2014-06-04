@@ -278,12 +278,14 @@ public class ScheduleActivity extends BeActiveActivity implements OnPageClickLis
 
     @Override
     public void onSingleTap(View view, EventItem item) {
-
+        Toast.makeText(getApplicationContext(), "Single tap: " + item.getTitle(),
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDoubleTap(View view, EventItem item) {
-
+        Toast.makeText(getApplicationContext(), "Double tap: " + item.getTitle(),
+                Toast.LENGTH_SHORT).show();
     }
 
     // TODO Move this class to BeActiveActivity?

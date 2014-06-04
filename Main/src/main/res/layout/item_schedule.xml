@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:clickable="true"
-    android:background="@android:color/white"
+    android:background="@drawable/bg_schedule_item"
     android:foreground="@drawable/selector_schedule_item">
 
     <RelativeLayout

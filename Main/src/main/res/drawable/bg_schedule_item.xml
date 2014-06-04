@@ -19,4 +19,6 @@
     <corners
         android:radius="0dp">
     </corners>
+
+    <solid android:color="@android:color/white"/>
 </shape>
